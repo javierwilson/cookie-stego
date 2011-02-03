@@ -1,0 +1,6 @@
+#define NO_ERROR 0
+
+#define ERROR_FREE_MEMORY -1
+#define ERROR_NO_REFERENCE -2
+#define ERROR_OVERFLOW -3
+
