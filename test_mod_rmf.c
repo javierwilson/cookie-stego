@@ -1,14 +1,19 @@
 #include <stdio.h>
 #include "matrix.h"
 #include "mod_rmf.h"
-
+#include "module.h"
 
 #define NB_FEATURES 9*9*4
+
+//#define MATRIX_DEBUG(...) 
+//#define MATRIX_DEBUG(...) fprintf(stderr, __VA_ARGS__)
+
+
 
 int main(int argc, char **argv)
 {
   int i,j;
-
+  param_t param;
 
   float tab[NB_FEATURES];
 
@@ -27,7 +32,9 @@ int main(int argc, char **argv)
 
   rmf_hello_module();
   rmf_init();
-  rmf_reset();
+
+  param.nb_dct = 1;
+  rmf_reset(&param);
   rmf_compute((int *) dct);
   rmf_get_features((float *) &tab);
     
