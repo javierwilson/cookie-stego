@@ -6,7 +6,7 @@
 
 //return an array of 9*9*4 features from a dct 8*8
 
-#define MOD_RMF_DEBUG(...) fprintf(stderr, __VA_ARGS__) 
+//#define MOD_RMF_DEBUG(...) fprintf(stderr, __VA_ARGS__) 
 #define MOD_RMF_DEBUG(...)
 
 static int already_used=0;
@@ -121,7 +121,6 @@ rmf_reset(param_t *param)
   ndct = param->nb_dct;
   matrix_reset(ndct*9+1);
 
-
   if(already_used) {
     free(a_F);
 
@@ -160,39 +159,57 @@ rmf_get_features(float *result)
 
   MOD_RMF_DEBUG("rmf_get_feature()\n");
 
-  int i,j,k;
+  int i,j,k,c;
   float fvalue;
-
-  for(j=-4,k=0;j<=4;j++) {
-    for(i=-4;i<=4;i++,k++) {
-      matrix_get_float(M_h,i,j,&fvalue);
-      result[k] = fvalue;
-    }
+  
+  for(k=0;k<9*9*4;k++) {
+    result[k]=0;
   }
 
-  for(j=-4;j<=4;j++) {
-    for(i=-4;i<=4;i++,k++) {
-      matrix_get_float(M_v,i,j,&fvalue);
-      result[k] = fvalue;
+  for(c=0;c<count;c++) {
+    M_h = a_M_h[count];
+    M_v = a_M_v[count];
+    M_d = a_M_d[count];
+    M_m = a_M_m[count];
+    
+    k=0;
+
+
+    for(j=-4;j<=4;j++) {
+      for(i=-4;i<=4;i++,k++) {
+	matrix_get_float(M_h,i,j,&fvalue);
+	result[k] = result[k] + fvalue;
+      }
+    }
+
+    for(j=-4;j<=4;j++) {
+      for(i=-4;i<=4;i++,k++) {
+	matrix_get_float(M_v,i,j,&fvalue);
+	result[k] = result[k] + fvalue;
+      }
+    }
+
+    for(j=-4;j<=4;j++) {
+      for(i=-4;i<=4;i++,k++) {
+	matrix_get_float(M_d,i,j,&fvalue);
+	result[k] = result[k] + fvalue;
+      }
+    }
+
+
+    for(j=-4;j<=4;j++) {
+      for(i=-4;i<=4;i++,k++) {
+	matrix_get_float(M_m,i,j,&fvalue);
+	result[k] = result[k] + fvalue;
+      }
     }
   }
-
-  for(j=-4;j<=4;j++) {
-    for(i=-4;i<=4;i++,k++) {
-      matrix_get_float(M_d,i,j,&fvalue);
-      result[k] = fvalue;
-    }
-  }
-
-
-  for(j=-4;j<=4;j++) {
-    for(i=-4;i<=4;i++,k++) {
-      matrix_get_float(M_m,i,j,&fvalue);
-      result[k] = fvalue;
-    }
-  }
-
   //  int * components = (int *) malloc(sizeof(int) * (2 * LIMIT + 1)); 
+
+  for(k=0;k<9*9*4;k++) {
+    result[k] = result[k] / count;
+  }
+
 
   return 0;
 }
@@ -217,7 +234,6 @@ rmf_compute(int *dct)
   a_F_v[count] = matrix_new(0,6,0,6,TYPE_INT);
   a_F_d[count] = matrix_new(0,6,0,6,TYPE_INT);
   a_F_m[count] = matrix_new(0,6,0,6,TYPE_INT);
-  
 
 #if 0
   if(result_size<9*9*4) {
