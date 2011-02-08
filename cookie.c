@@ -124,12 +124,11 @@ int main(int argc, char *argv[]) {
     for (z=0; z<size; z++) {
       //printf("%d ",z);fflush(stdout);
       rmf_compute((int *) dct[z]);
-      if(z % (size/100) == 10) {
+      if(z % (size/100) == 0) {
       	printf("%d%% ", (z *100 / size));fflush(stdout);
       }
     }
 
-  // get features (average of sum in this case)
     rmf_get_features(tab);
     for(i=0;i<module->features;i++) {
       printf("%f ",tab[i]);
@@ -140,5 +139,6 @@ int main(int argc, char *argv[]) {
     printf("rmf_release();\n");
   }
 
+  return 0;
 
 }
