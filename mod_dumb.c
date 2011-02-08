@@ -6,6 +6,16 @@ static int *sum;
 static int count=0;
 static int tsum=0;
 
+//#define DUMB_DEBUG_OPT 
+// should be set into Makefile instead (with gcc -c (...) -DDUMB_DEBUG_OPT)
+
+#ifdef DUMB_DEBUG_OPT
+#define DUMB_DEBUG(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define DUMB_DEBUG(...)
+#endif
+
+
 int dumb_hello_module()
 {
   printf("dumb non-existant feature\n");

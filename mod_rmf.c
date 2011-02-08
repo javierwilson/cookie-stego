@@ -6,8 +6,15 @@
 
 //return an array of 9*9*4 features from a dct 8*8
 
-//#define MOD_RMF_DEBUG(...) fprintf(stderr, __VA_ARGS__) 
+
+//#define MATRIX_DEBUG_OPT 
+// should be set into Makefile instead (with gcc -c (...) -DMOD_RMF_DEBUG_OPT)
+
+#ifdef MOD_RMF_DEBUG_OPT
+#define MOD_RMF_DEBUG(...) fprintf(stderr, __VA_ARGS__)
+#else
 #define MOD_RMF_DEBUG(...)
+#endif
 
 static int already_used=0;
 
@@ -355,7 +362,7 @@ rmf_compute(int *dct)
       }
     }
   }
-  printf("sum = %f\n", sum);
+
   //  matrix_printf(M_h);
   matrix_scale_float(M_h, 1.0/sum);
   //  matrix_printf(M_h);
