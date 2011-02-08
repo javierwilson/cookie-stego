@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "matrix.h"
 #include "mod_rmf.h"
 #include "module.h"
@@ -12,10 +13,11 @@
 
 int main(int argc, char **argv)
 {
+  module_t *module;
   int i,j;
   param_t param;
 
-  float tab[NB_FEATURES];
+  float *tab;
 
   int dct[8][8] = { 
     { 45, 8, 6, 4, 2, 0, 0, 0 },
@@ -31,17 +33,19 @@ int main(int argc, char **argv)
   //  printf("do_extraction()...\n");
 
   rmf_hello_module();
-  rmf_init();
-
   param.nb_dct = 1;
+  rmf_init();
+  module = rmf_get_module();
+  tab = (float *) malloc(sizeof(float) * module->features);
   rmf_reset(&param);
   rmf_compute((int *) dct);
-  rmf_get_features((float *) &tab);
+  rmf_get_features((float *) tab);
     
-
+  for(i=0;i<module->features;i++) {
+    printf("%f ",tab[i]);
+  }
   //  do_extraction((int *)dct, 8,8, &tab, NB_FEATURES);
   //  printf("done\n");
 
   return 0;
 }
-
