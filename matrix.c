@@ -7,6 +7,7 @@
 
 //#define MATRIX_DEBUG(...) 
 #define MATRIX_DEBUG(...) fprintf(stderr, __VA_ARGS__)
+#define MATRIX_DEBUG(...)
 
 #define MAX_ARRAYS 1000000
 
@@ -37,12 +38,13 @@ matrix_init()
 }
 
 int
-matrix_reset(int max_array)
+matrix_reset(int max)
 {
   int i;
 
   MATRIX_DEBUG("matrix_reset()\n");
 
+  max_array = max;
   if(handles!=NULL) {
     matrix_delete_all();
     free(handles);
@@ -55,9 +57,9 @@ matrix_reset(int max_array)
 
   memset((void *) handles, 0, sizeof(array_t *) * max_array);
   // NULL seems to be different than 0???
-  //  for(i=0;i<MAX_ARRAYS;i++) {
+  //for(i=0;i<max_array;i++) {
   //    handles[i] = NULL; 
-  //  }
+  //}
   
   return NO_ERROR;
 }
@@ -98,10 +100,9 @@ matrix_new(int min_x, int max_x, int min_y, int max_y, int type)
   
   if(array==NULL) {
     //DEBUG_PROBA_DIFF("");
-    printf("ERREUR FREE_MEMMORY\n");
+    MATRIX_DEBUG("ERREUR FREE_MEMMORY index=%d\n", index);
     return ERROR_FREE_MEMORY;
   }
-
 
   array->min_x = min_x;
   array->min_y = min_y;
