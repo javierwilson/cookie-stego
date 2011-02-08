@@ -3,6 +3,7 @@
 #include <getopt.h>
 #include <string.h>
 #include <jpeglib.h>
+#include "common.h"
 
 #define MAXLEN_FILENAME 1000
 
