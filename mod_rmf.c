@@ -7,11 +7,15 @@
 //return an array of 9*9*4 features from a dct 8*8
 
 #define MOD_RMF_DEBUG(...) fprintf(stderr, __VA_ARGS__) 
+#define MOD_RMF_DEBUG(...)
 
 static int already_used=0;
 
 static int *matrix;
 static int count=0;
+
+
+//use of int can be more efficient than short for dct coefficients
 
 static int F;
 
@@ -67,6 +71,8 @@ module_t * rmf_get_module(void)
 int
 rmf_init(void)
 {
+  MOD_RMF_DEBUG("rmf_init()\n");
+
   module = (module_t *) malloc(sizeof(module_t));
   module->features = 9 * 9 * 4;
 
@@ -78,6 +84,7 @@ rmf_init(void)
 int
 rmf_release(void)
 {
+  MOD_RMF_DEBUG("rmf_release()\n");
 
   /* matrix_delete(F); */
 
@@ -101,6 +108,8 @@ rmf_release(void)
 int
 rmf_reset(param_t *param)
 {
+  MOD_RMF_DEBUG("rmf_reset()\n");
+
   int ndct;
   
 
@@ -148,6 +157,9 @@ rmf_reset(param_t *param)
 int
 rmf_get_features(float *result)
 {
+
+  MOD_RMF_DEBUG("rmf_get_feature()\n");
+
   int i,j,k;
   float fvalue;
 
@@ -180,6 +192,8 @@ rmf_get_features(float *result)
     }
   }
 
+  //  int * components = (int *) malloc(sizeof(int) * (2 * LIMIT + 1)); 
+
   return 0;
 }
 
@@ -187,6 +201,9 @@ int
 rmf_compute(int *dct)
 {
   int i,j,k,u,v;
+
+  MOD_RMF_DEBUG("rmf_compute()\n");
+
 
   a_F[count] = matrix_new(0,7,0,7,TYPE_INT);
 
@@ -201,7 +218,6 @@ rmf_compute(int *dct)
   a_F_d[count] = matrix_new(0,6,0,6,TYPE_INT);
   a_F_m[count] = matrix_new(0,6,0,6,TYPE_INT);
   
-  int * components = (int *) malloc(sizeof(int) * (2 * LIMIT + 1)); 
 
 #if 0
   if(result_size<9*9*4) {
@@ -324,9 +340,9 @@ rmf_compute(int *dct)
     }
   }
   printf("sum = %f\n", sum);
-  matrix_printf(M_h);
+  //  matrix_printf(M_h);
   matrix_scale_float(M_h, 1.0/sum);
-  matrix_printf(M_h);
+  //  matrix_printf(M_h);
 
 
  
