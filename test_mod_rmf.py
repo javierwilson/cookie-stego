@@ -37,5 +37,5 @@ proba_diff.rmf_hello_module()
 proba_diff.rmf_init()
 proba_diff.rmf_reset()
 proba_diff.rmf_compute(pointer(dct_lin))
-proba_diff.rmf_extract_features(pointer(features))
+proba_diff.rmf_get_features(pointer(features))
 

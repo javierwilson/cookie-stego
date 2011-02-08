@@ -24,7 +24,7 @@ int rmf_reset(void);
 int rmf_compute(int *dct);
 
 // extract the 324 features
-int rmf_extract_features(float *result);
+int rmf_get_features(float *result);
 
 // create a probability array from the difference
 // and return the handle

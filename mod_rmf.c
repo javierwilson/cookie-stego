@@ -104,7 +104,7 @@ rmf_reset(void)
 }
 
 int
-rmf_extract_features(float *result)
+rmf_get_features(float *result)
 {
   int i,j,k;
   float fvalue;

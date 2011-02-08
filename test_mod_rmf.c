@@ -29,7 +29,7 @@ int main(int argc, char **argv)
   rmf_init();
   rmf_reset();
   rmf_compute((int *) dct);
-  rmf_extract_features((float *) &tab);
+  rmf_get_features((float *) &tab);
     
 
   //  do_extraction((int *)dct, 8,8, &tab, NB_FEATURES);
