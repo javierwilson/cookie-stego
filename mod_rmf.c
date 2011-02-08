@@ -4,7 +4,6 @@
 #include "error.h"
 #include "matrix.h"
 
-
 //return an array of 9*9*4 features from a dct 8*8
 
 #define PROBA_DIFF_DEBUG(...) 
@@ -39,11 +38,22 @@ rmf_test_param(int *dct)
   }
 }
 
+module_t *module;
+
+module_t * rmf_get_module(void)
+{
+  return module;
+}
+
+
 
 #define LIMIT 4
 
 int rmf_init(void)
 {
+  module = (module_t *) malloc(sizeof(module_t));
+  module->features = 9 * 9 * 4;
+
   matrix_init();
 
   F = matrix_new(0,7,0,7,TYPE_INT);
@@ -82,6 +92,8 @@ rmf_release(void)
 
   matrix_release();
   
+  free(module);
+
   return 0;
 }
 

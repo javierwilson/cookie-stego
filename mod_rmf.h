@@ -1,9 +1,11 @@
-
+#include "module.h"
 
 #define MAX_HANDLE 256
 
+module_t * rmf_get_module(void);
+
 // display the name o the module
-int rmf_hello_module();
+int rmf_hello_module(void);
 
 // test program argument
 int rmf_test_param(int *dct);
