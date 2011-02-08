@@ -11,7 +11,7 @@
 
 struct option long_options[] = {
   {"module", 1, 0, 0},
-  {"file", 1, 0, 0},
+  {"file", 1, 0, 1},
   {0, 0, 0, 0}
 };
 
@@ -36,25 +36,13 @@ int main(int argc, char *argv[]) {
 
 
   for(;;) {
-    opt = getopt_long (argc, argv, "abc:d:012",
+    opt = getopt_long (argc, argv, "012",
 		       long_options, &option_index);
 
     if(opt==-1) break;
+    printf("OPT = %d\n", opt); 
     switch (opt) {
     case 0:
-      printf ("option %s", long_options[option_index].name);
-      if (optarg)
-	printf (" with arg %s", optarg);
-      printf ("\n");
-      if(strlen(optarg)<MAXLEN_FILENAME) {
-	strcpy(filename,optarg);
-      }
-      else {
-	printf("Error : filename too long");
-	exit(0);
-      }
-      break;
-    case 1:
       printf ("option %s", long_options[option_index].name);
       if (optarg)
 	printf (" with arg %s", optarg);
@@ -63,7 +51,20 @@ int main(int argc, char *argv[]) {
 	strcpy(algoname,optarg);
       }
       else {
-	printf("Error : agloname too long");
+	printf("Error : algoname too long\n");
+	exit(0);
+      }
+      break;
+    case 1:
+      printf ("option %s", long_options[option_index].name);
+      if (optarg)
+	printf (" with arg %s", optarg);
+      printf ("\n");
+      if(strlen(optarg)<MAXLEN_FILENAME) {
+	strcpy(filename,optarg);
+      }
+      else {
+	printf("Error : filename too long\n");
 	exit(0);
       }
       break;
