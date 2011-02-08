@@ -6,9 +6,13 @@
 
 #define MAXLEN_FILENAME 1000
 
-#define EXTRACT_DCT_DEBUG(...) 
-//#define EXTRACT_DCT_DEBUG(...) fprintf(stderr, __VA_ARGS__)
+//#define EXTRACT_DCT_DEBUG_OPT
 
+#ifdef EXTRACT_DCT_DEBUG_OPT
+#define EXTRACT_DCT_DEBUG(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define EXTRACT_DCT_DEBUG(...)
+#endif
 
 int (*dct)[DLEN][DLEN];
 // FIXME: who executes "free" for this array?
@@ -54,7 +58,7 @@ int extract_dct(char *filename) {
         for (i=0; i<DCTSIZE2; i++) {
           dct[index][j][i%DLEN] = coef_buffers[compnum][0][blocknum][i];
           EXTRACT_DCT_DEBUG("%4d ", coef_buffers[compnum][0][blocknum][i]);
-#ifdef EXTRACT_DCT_DEBUG
+#ifdef EXTRACT_DCT_DEBUG_OPT
           if ((i+1)%DLEN==0) { printf("\n"); j++; }
 #endif
         }
