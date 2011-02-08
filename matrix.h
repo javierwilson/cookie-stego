@@ -3,6 +3,7 @@
 
 
 int matrix_init(void);
+int matrix_reset(int max_array);
 int matrix_release(void);
 int matrix_new(int min_x, int min_y, int max_x, int max_y, int type);
 int matrix_delete(int handle);

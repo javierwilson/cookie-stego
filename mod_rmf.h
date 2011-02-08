@@ -17,8 +17,7 @@ int rmf_init(void);
 int rmf_release(void);
 
 // ready to restart new computations
-int rmf_reset(void);
-
+int rmf_reset(param_t *param);
 
 // compute from a dct
 int rmf_compute(int *dct);

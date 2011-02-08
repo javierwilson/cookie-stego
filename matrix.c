@@ -6,7 +6,7 @@
 #include "error.h"
 
 
-#define MAX_ARRAYS 100
+#define MAX_ARRAYS 1000000
 
 typedef struct array {
 
@@ -25,16 +25,23 @@ typedef struct array {
 
 array_t **handles;
 
+static int max_array;
+
 int
-matrix_init(void)
+matrix_init()
+{
+}
+
+int
+matrix_reset(int max_array)
 {
   int i;
-  handles = (array_t **) malloc(sizeof(array_t *) * MAX_ARRAYS);
+  handles = (array_t **) malloc(sizeof(array_t *) * max_array);
 
   // must be set to NULL
   // at least for python-ctype program binding
 
-  memset((void *) handles, 0, sizeof(array_t *) * MAX_ARRAYS);
+  memset((void *) handles, 0, sizeof(array_t *) * max_array);
   // NULL seems to be different than 0???
   //  for(i=0;i<MAX_ARRAYS;i++) {
   //    handles[i] = NULL; 
@@ -58,7 +65,7 @@ matrix_new(int min_x, int max_x, int min_y, int max_y, int type)
 
   array_t *array=NULL;
   // find the first free handle
-  for(index=1;index<MAX_ARRAYS;index++) {
+  for(index=1;index<max_array;index++) {
     if(handles[index]==NULL) {
       array = (array_t *) malloc(sizeof(array_t));
       if(array==NULL) { 
@@ -115,7 +122,7 @@ matrix_new(int min_x, int max_x, int min_y, int max_y, int type)
 int
 matrix_delete(int handle) 
 {
-  if(handle>MAX_ARRAYS) {
+  if(handle>max_array) {
     return ERROR_OVERFLOW;
   }
   
@@ -175,7 +182,7 @@ matrix_set_int(int handle, int i, int j, int value)
   int *data;
   int idx;
 
-  if(handle>=MAX_ARRAYS) {
+  if(handle>=max_array) {
     return ERROR_OVERFLOW;
   }
   
@@ -206,7 +213,7 @@ int matrix_get_int(int handle, int i, int j, int *value)
   int *data;
   int idx;
 
-  if(handle>=MAX_ARRAYS) {
+  if(handle>=max_array) {
     return ERROR_OVERFLOW;
   }
   
@@ -238,7 +245,7 @@ matrix_set_float(int handle, int i, int j, float value)
   float *data;
   int idx;
 
-  if(handle>=MAX_ARRAYS) {
+  if(handle>=max_array) {
     return ERROR_OVERFLOW;
   }
   
@@ -269,7 +276,7 @@ int matrix_get_float(int handle, int i, int j, float *value)
   float *data;
   int idx;
 
-  if(handle>=MAX_ARRAYS) {
+  if(handle>=max_array) {
     return ERROR_OVERFLOW;
   }
   

@@ -21,6 +21,7 @@ static int F_d;
 static int F_m;
 
 
+
 int
 rmf_hello_module()
 {
@@ -51,10 +52,19 @@ module_t * rmf_get_module(void)
 
 int rmf_init(void)
 {
+  int ndct;
+  
   module = (module_t *) malloc(sizeof(module_t));
   module->features = 9 * 9 * 4;
 
-  matrix_init();
+  // need nb_dct * 1 matrix : F
+  // plus nb_dct * 4 translation matrix : M_h, M_v, M_d, M_m
+  // plus nb_dct * 4 final matrix : M_h, M_v, M_d, M_m
+  // plus 1 final average matrix
+
+  //  ndct = param->nb_dct;
+  matrix_init();//ndct*9+1);
+  //matrix_reset();
 
   F = matrix_new(0,7,0,7,TYPE_INT);
 
@@ -98,7 +108,7 @@ rmf_release(void)
 }
 
 int
-rmf_reset(void)
+rmf_reset(param_t *param)
 {
   return 0;
 }
@@ -145,6 +155,8 @@ int
 rmf_compute(int *dct)
 {
   int i,j,k,u,v;
+
+  
 
 #if 0
   if(result_size<9*9*4) {
@@ -259,6 +271,8 @@ rmf_compute(int *dct)
   matrix_printf(M_h);
   matrix_scale_float(M_h, 1.0/sum);
   matrix_printf(M_h);
+
+
  
  
   PROBA_DIFF_DEBUG("matrix M_h done\n");
@@ -302,6 +316,14 @@ rmf_compute(int *dct)
   }
 
   PROBA_DIFF_DEBUG("matrix M_v done\n");
+
+
+
+  /* add(M_h,count); */
+  /* save(M_v,count); */
+  /* save(M_d,count); */
+  /* save(M_m,count); */
+
   
 
   return 0;
