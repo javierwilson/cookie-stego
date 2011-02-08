@@ -6,7 +6,7 @@
 
 //return an array of 9*9*4 features from a dct 8*8
 
-#define MOD_RMF_DEBUG(...) 
+#define MOD_RMF_DEBUG(...) fprintf(stderr, __VA_ARGS__) 
 
 static int already_used=0;
 
@@ -72,7 +72,7 @@ rmf_init(void)
 
 
   matrix_init();
-    return 0;
+  return 0;
 }
 
 int
