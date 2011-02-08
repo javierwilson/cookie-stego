@@ -1,11 +1,6 @@
-#define DLEN 8
-#include "extract_dct.c"
-#include "matrix.h"
-//#include "mod_rmf.h"
+#include "extract_dct.h"
+#include "mod_rmf.h"
 #include "mod_dumb.h"
-#include "mod_dumb.c"
-#define NB_FEATURES 9*9*4
-#define MAXLEN_FILENAME 1000
 
 int main(int argc, char *argv[]) {
   int size, feature;

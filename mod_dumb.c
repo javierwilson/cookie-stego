@@ -14,6 +14,7 @@ int dumb_init(void)
   return 0;
 }
 
+// 
 int dumb_release(void)
 {
   free(sum);
