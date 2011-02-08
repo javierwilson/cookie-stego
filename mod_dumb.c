@@ -1,9 +1,14 @@
+static int *sum;
+static int count=0;
+static int tsum=0;
+
 int dumb_hello_module()
 {
   printf("dumb non-existant feature\n");
   return 0;
 }
 
+// Initializes module
 int dumb_init(void)
 {
   return 0;
@@ -14,29 +19,33 @@ int dumb_release(void)
   return 0;
 }
 
-int dumb_reset(void)
+// Initializes variables for each image
+int dumb_reset(int nb_dct)
 {
+  sum = malloc(nb_dct*sizeof(int));
   return 0;
 }
 
-int dumb_compute(int adct[DLEN][DLEN]) {
+// Sum values
+void dumb_compute(int adct[DLEN][DLEN]) {
   int x,y,z;
-  int sum=0;
+  sum[count] = 0;
   for (x=0; x<DLEN; x++) {
     for (y=0; y<DLEN; y++) {
-      sum += adct[x][y];
+      sum[count] += adct[x][y];
     }
   }
-  return 0;
+  printf("Sum of DCT # %d is %d\n",count,sum[count]);
+  count++;
 }
 
+// Return average
 int dumb_get_features() {
-  printf("DCT # %d of %d\n", z+1, size);
-  for (x=0; x<DLEN; x++) {
-    for (y=0; y<DLEN; y++) {
-      printf("%4d ", dct[z][x][y]);
-    }
-    printf("\n");
+  int i;
+  int average = 0;
+  for(i=0; i<count; i++) {
+    tsum += sum[i];
   }
-  return 0;
+  printf("TSUM %d COUNT %d\n", tsum, count);
+  return tsum/count;
 }

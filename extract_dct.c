@@ -4,11 +4,6 @@
 #include <string.h>
 #include <jpeglib.h>
 
-
-#include "matrix.h"
-#include "mod_rmf.h"
-#define NB_FEATURES 9*9*4
-#define DLEN 8
 #define MAXLEN_FILENAME 1000
 
 int (*dct)[DLEN][DLEN];
