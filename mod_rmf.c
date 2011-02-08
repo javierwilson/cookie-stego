@@ -6,7 +6,7 @@
 
 //return an array of 9*9*4 features from a dct 8*8
 
-#define PROBA_DIFF_DEBUG(...) 
+#define MOD_RMF_DEBUG(...) 
 
 static int already_used=0;
 
@@ -331,7 +331,7 @@ rmf_compute(int *dct)
 
  
  
-  PROBA_DIFF_DEBUG("matrix M_h done\n");
+  MOD_RMF_DEBUG("matrix M_h done\n");
 
   // matrix M_v
   for(i=-LIMIT;i<=LIMIT;i++) {
@@ -371,7 +371,7 @@ rmf_compute(int *dct)
     }
   }
 
-  PROBA_DIFF_DEBUG("matrix M_v done\n");
+  MOD_RMF_DEBUG("matrix M_v done\n");
 
   count ++;
 
