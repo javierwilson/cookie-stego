@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 
   // set default option
 
-  strcpy(algoname,"dump");
+  strcpy(algoname,"dumb");
 
 
   for(;;) {
@@ -63,17 +63,16 @@ int main(int argc, char *argv[]) {
 	strcpy(algoname,optarg);
       }
       else {
-	printf("Error : filename too long");
+	printf("Error : agloname too long");
 	exit(0);
       }
       break;
     }
   }
 
-
-
   if(filename[0]==0) {
-    printf("please give a file name\n");
+    printf("please give a file name: %s --file=sample.jpg\n", argv[0]);
+    exit(1);
   }
 
 
