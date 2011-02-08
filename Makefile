@@ -2,6 +2,9 @@ PROGNAME=test_matrix test_mod_rmf cookie
 
 all: matrix.o mod_rmf.o libmod_rmf.so $(PROGNAME)
 
+hash.o: hash.c hash.h
+	gcc -fPIC -c $<
+
 matrix.o: matrix.c matrix.h
 	gcc -fPIC -c $<
 
@@ -28,7 +31,7 @@ extract_dct.o: extract_dct.c
 cookie.o: cookie.c
 	gcc -c $<
 
-cookie: cookie.o extract_dct.o mod_dumb.o mod_rmf.o matrix.o
+cookie: cookie.o extract_dct.o mod_dumb.o mod_rmf.o matrix.o mod_histo.o hash.o
 	gcc -ljpeg -o $@ $^
 
 test_mod_rmf.o: test_mod_rmf.c

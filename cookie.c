@@ -82,6 +82,7 @@ int main(int argc, char *argv[]) {
   printf("*** Number of DCTs: %d ***\n", size);
 
 
+  /*********************** dumb **************************/
   if(!strcmp(algoname,"dumb")) {
     printf("exit dumb\n");
     // initializes module
@@ -102,6 +103,28 @@ int main(int argc, char *argv[]) {
     dumb_release();
   }
 
+  /*********************** histo **************************/
+  if(!strcmp(algoname,"histo")) {
+    printf("exit histo\n");
+    // initializes module
+    histo_init();
+    
+    // compute histogram for each DCT
+    int x,y,z;
+    histo_reset(size);
+    for (z=0; z<size; z++) {
+      histo_compute(dct[z]);
+    }
+
+  // get features (average of sum in this case)
+    feature = histo_get_features();
+    printf("Average of sum of DCTs = %d\n", feature);
+
+    // free allocations
+    histo_release();
+  }
+
+  /*********************** rmf **************************/
   else if(!strcmp(algoname,"rmf")) {
     printf("exit rmf\n");
 
