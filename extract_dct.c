@@ -6,11 +6,9 @@
 
 
 #include "matrix.h"
-#include "proba_diff.h"
+#include "mod_rmf.h"
 #define NB_FEATURES 9*9*4
 #define DLEN 8
-
-
 #define MAXLEN_FILENAME 1000
 
 int (*dct)[DLEN][DLEN];
@@ -69,17 +67,6 @@ int extract_dct(char *filename) {
   return total_size;
 }
 
-// Dumb Feature: Sums all values of DCT
-int feature_sum(int adct[DLEN][DLEN]) {
-  int x,y,z;
-  int sum=0;
-  for (x=0; x<DLEN; x++) {
-    for (y=0; y<DLEN; y++) {
-      sum += adct[x][y];
-    }
-  }
-  return sum;
-}
 
 
 struct option long_options[] = {
@@ -90,12 +77,12 @@ struct option long_options[] = {
 
 extern char *optarg;
 
+/*
 int main(int argc, char *argv[]) {
   int opt;
   int option_index = 0;
 
   char filename[MAXLEN_FILENAME];
-  //int *dct;
   float tab[NB_FEATURES];
   int size, feature;
 
@@ -127,31 +114,5 @@ int main(int argc, char *argv[]) {
     printf("please give a file name\n");
   }
 
-
-  size = extract_dct(filename);
-  printf("*** Number of DCTs: %d ***\n", size);
-  int x,y,z;
-  for (z=0; z<size; z++) {
-
-    // do extraction
-    // do_extraction((int *)dct[z], DLEN, DLEN, &tab, NB_FEATURES);
-
-    // do sum
-    feature = feature_sum(dct[z]);
-    printf("Sum of DCT # %d = %d\n", z+1, feature);
-
-    // print DCT
-    /*
-    printf("DCT # %d of %d\n", z+1, size);
-    for (x=0; x<DLEN; x++) {
-      for (y=0; y<DLEN; y++) {
-        printf("%4d ", dct[z][x][y]);
-      }
-      printf("\n");
-    }
-    */
-
-  }
-
-
 }
+*/
