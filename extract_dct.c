@@ -6,6 +6,10 @@
 
 #define MAXLEN_FILENAME 1000
 
+#define EXTRACT_DCT_DEBUG(...) 
+//#define EXTRACT_DCT_DEBUG(...) fprintf(stderr, __VA_ARGS__)
+
+
 int (*dct)[DLEN][DLEN];
 // FIXME: who executes "free" for this array?
 
@@ -30,14 +34,14 @@ int extract_dct(char *filename) {
   // print basic info and get specific index values
   int total_size = 0;
   int size[3];
-  printf("components: %d  image width: %d  image height: %d\n", cinfo.num_components, cinfo.image_width, cinfo.image_height);
+  EXTRACT_DCT_DEBUG("components: %d  image width: %d  image height: %d\n", cinfo.num_components, cinfo.image_width, cinfo.image_height);
   for (compnum=0; compnum < cinfo.num_components; compnum++) {
     size[compnum] = cinfo.comp_info[compnum].width_in_blocks * cinfo.comp_info[compnum].height_in_blocks;
     total_size += size[compnum];
-    printf("component: %d  width in blocks: %d  height in blocks: %d DCTs: %d\n",
+    EXTRACT_DCT_DEBUG("component: %d  width in blocks: %d  height in blocks: %d DCTs: %d\n",
       compnum,cinfo.comp_info[compnum].width_in_blocks,cinfo.comp_info[compnum].height_in_blocks, size[compnum]);
   }
-  printf("Total number of DCTs: %d\n", total_size);
+  EXTRACT_DCT_DEBUG("Total number of DCTs: %d\n", total_size);
 
   dct = malloc(total_size*DLEN*DLEN*sizeof(int));
   int index = 0;
@@ -45,15 +49,17 @@ int extract_dct(char *filename) {
     for (rownum=0; rownum<cinfo.comp_info[compnum].height_in_blocks; rownum++) {
       coef_buffers[compnum] = ((&cinfo)->mem->access_virt_barray) ((j_common_ptr) &cinfo, coef_arrays[compnum], rownum, (JDIMENSION) 1, FALSE);
       for (blocknum=0; blocknum<cinfo.comp_info[compnum].width_in_blocks; blocknum++) {
-        printf("Component: %d Row: %d Block: %d\n", compnum, rownum, blocknum);
+        EXTRACT_DCT_DEBUG("Component: %d Row: %d Block: %d\n", compnum, rownum, blocknum);
         int j=0;
         for (i=0; i<DCTSIZE2; i++) {
           dct[index][j][i%DLEN] = coef_buffers[compnum][0][blocknum][i];
-          printf("%4d ", coef_buffers[compnum][0][blocknum][i]);
+          EXTRACT_DCT_DEBUG("%4d ", coef_buffers[compnum][0][blocknum][i]);
+#ifdef EXTRACT_DCT_DEBUG
           if ((i+1)%DLEN==0) { printf("\n"); j++; }
+#endif
         }
         index++;
-        printf("\n");
+        EXTRACT_DCT_DEBUG("\n");
       }
     }
   }
