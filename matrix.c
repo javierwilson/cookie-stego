@@ -33,11 +33,11 @@ matrix_init(void)
   // must be set to NULL
   // at least for python-ctype program binding
 
-  //  memset((void *) handles, 0, sizeof(sizeof(array_t *) * MAX_ARRAYS));
-  // NULL seems to be different than 0
-  for(i=0;i<MAX_ARRAYS;i++) {
-    handles[i] = NULL; 
-  }
+  memset((void *) handles, 0, sizeof(array_t *) * MAX_ARRAYS);
+  // NULL seems to be different than 0???
+  //  for(i=0;i<MAX_ARRAYS;i++) {
+  //    handles[i] = NULL; 
+  //  }
   
   return NO_ERROR;
 }
@@ -293,8 +293,24 @@ int matrix_get_float(int handle, int i, int j, float *value)
 
 }
 
+int
+matrix_scale_float(int handle, float scale)
+{
+  int i,size;
+  float *tab;
+  
+  array_t *matrix=handles[handle];
+  size = matrix->width * matrix->height;
 
-int matrix_printf(int handle)
+  tab = (float *) matrix->data;
+  for(i=0;i<size;i++) {
+    tab[i] = tab[i] * scale;
+  }
+  return 0;
+}
+
+int
+matrix_printf(int handle)
 {
   int i;
   int j;
