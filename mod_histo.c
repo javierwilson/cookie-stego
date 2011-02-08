@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "common.h"
+#include "hash.h"
+
+static int count=0;
+
+// say hello
+int histo_hello_module()
+{
+  printf("global histogram feature\n");
+  return 0;
+}
+
+// Initializes module
+int histo_init(void)
+{
+  return 0;
+}
+
+// free memory
+int histo_release(void)
+{
+  //free(sum);
+  return 0;
+}
+
+// Initializes variables for each image
+int histo_reset(int nb_dct)
+{
+  inithashtab();
+  return 0;
+}
+
+// Counts values
+void histo_compute(int adct[DLEN][DLEN]) {
+  int x,y,z;
+  int current_value;
+  for (x=0; x<DLEN; x++) {
+    for (y=0; y<DLEN; y++) {
+      current_value = hash_get(adct[x][y]);
+      hash_set(adct[x][y], current_value+1);
+    }
+  }
+  count++;
+}
+
+// Return average
+int histo_get_features() {
+  int i;
+  int average = 0;
+  hash_display();
+  return 0;
+}
