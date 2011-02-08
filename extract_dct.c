@@ -7,6 +7,7 @@
 #define MAXLEN_FILENAME 1000
 
 int (*dct)[DLEN][DLEN];
+// FIXME: who executes "free" for this array?
 
 int extract_dct(char *filename) {
   struct jpeg_decompress_struct cinfo;
