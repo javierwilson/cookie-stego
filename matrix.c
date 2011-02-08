@@ -30,12 +30,19 @@ static int max_array;
 int
 matrix_init()
 {
+  handles = NULL;
 }
 
 int
 matrix_reset(int max_array)
 {
   int i;
+
+  if(handles!=NULL) {
+    matrix_delete_all();
+    free(handles);
+  }
+
   handles = (array_t **) malloc(sizeof(array_t *) * max_array);
 
   // must be set to NULL
@@ -133,6 +140,20 @@ matrix_delete(int handle)
   free(handles[handle]->data);
   free(handles[handle]);
   return;
+}
+
+int
+matrix_delete_all(void)
+{
+  int i;
+  
+  for(i=0;i<max_array;i++) {
+    if(handles[i]!=NULL) {
+      free(handles[i]->data);
+      free(handles[i]);
+    }
+  }
+  return 0;
 }
 
 static int compute_index(int handle, int i, int j) 

@@ -8,6 +8,11 @@
 
 #define PROBA_DIFF_DEBUG(...) 
 
+static int already_used=0;
+
+static int *matrix;
+static int count=0;
+
 static int F;
 
 static int M_h;
@@ -21,6 +26,17 @@ static int F_d;
 static int F_m;
 
 
+static int *a_F;
+
+static int *a_M_h;
+static int *a_M_v;
+static int *a_M_d;
+static int *a_M_m;
+
+static int *a_F_h;
+static int *a_F_v;
+static int *a_F_d;
+static int *a_F_m;
 
 int
 rmf_hello_module()
@@ -46,59 +62,34 @@ module_t * rmf_get_module(void)
   return module;
 }
 
-
-
 #define LIMIT 4
 
-int rmf_init(void)
+int
+rmf_init(void)
 {
-  int ndct;
-  
   module = (module_t *) malloc(sizeof(module_t));
   module->features = 9 * 9 * 4;
 
-  // need nb_dct * 1 matrix : F
-  // plus nb_dct * 4 translation matrix : M_h, M_v, M_d, M_m
-  // plus nb_dct * 4 final matrix : M_h, M_v, M_d, M_m
-  // plus 1 final average matrix
 
-  //  ndct = param->nb_dct;
-  matrix_init();//ndct*9+1);
-  //matrix_reset();
-
-  F = matrix_new(0,7,0,7,TYPE_INT);
-
-  // should be from -4 to 4 instead of -128 to LIMIT
-  M_h = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
-  M_v = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
-  M_d = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
-  M_m = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
-
-  F_h = matrix_new(0,6,0,6,TYPE_INT);
-  F_v = matrix_new(0,6,0,6,TYPE_INT);
-  F_d = matrix_new(0,6,0,6,TYPE_INT);
-  F_m = matrix_new(0,6,0,6,TYPE_INT);
-  
-  int * components = (int *) malloc(sizeof(int) * (2 * LIMIT + 1)); 
-
-  return 0;
+  matrix_init();
+    return 0;
 }
 
 int
 rmf_release(void)
 {
 
-  matrix_delete(F);
+  /* matrix_delete(F); */
 
-  matrix_delete(M_h);
-  matrix_delete(M_v);
-  matrix_delete(M_d);
-  matrix_delete(M_m);
+  /* matrix_delete(M_h); */
+  /* matrix_delete(M_v); */
+  /* matrix_delete(M_d); */
+  /* matrix_delete(M_m); */
   
-  matrix_delete(F_h);
-  matrix_delete(F_v);
-  matrix_delete(F_d);
-  matrix_delete(F_m);
+  /* matrix_delete(F_h); */
+  /* matrix_delete(F_v); */
+  /* matrix_delete(F_d); */
+  /* matrix_delete(F_m); */
 
   matrix_release();
   
@@ -110,6 +101,47 @@ rmf_release(void)
 int
 rmf_reset(param_t *param)
 {
+  int ndct;
+  
+
+  // need nb_dct * 1 matrix : F
+  // plus nb_dct * 4 translation matrix : M_h, M_v, M_d, M_m
+  // plus nb_dct * 4 final matrix : M_h, M_v, M_d, M_m
+  // plus 1 final average matrix
+
+  ndct = param->nb_dct;
+  matrix_reset(ndct*9+1);
+
+
+  if(already_used) {
+    free(a_F);
+
+    free(a_M_h);
+    free(a_M_v);
+    free(a_M_d);
+    free(a_M_m);
+
+    free(a_F_h);
+    free(a_F_v);
+    free(a_F_d);
+    free(a_F_m);
+  }
+
+  a_F = (int *) malloc(sizeof(int) *ndct);
+  
+  a_M_h = (int *) malloc(sizeof(int) *ndct);
+  a_M_v = (int *) malloc(sizeof(int) *ndct);
+  a_M_d = (int *) malloc(sizeof(int) *ndct);
+  a_M_m = (int *) malloc(sizeof(int) *ndct);
+
+  a_F_h = (int *) malloc(sizeof(int) *ndct);
+  a_F_v = (int *) malloc(sizeof(int) *ndct);
+  a_F_d = (int *) malloc(sizeof(int) *ndct);
+  a_F_m = (int *) malloc(sizeof(int) *ndct);
+
+  already_used = 1;
+
+
   return 0;
 }
 
@@ -156,7 +188,20 @@ rmf_compute(int *dct)
 {
   int i,j,k,u,v;
 
+  a_F[count] = matrix_new(0,7,0,7,TYPE_INT);
+
+  // should be from -4 to 4 instead of -128 to LIMIT
+  a_M_h[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
+  a_M_v[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
+  a_M_d[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
+  a_M_m[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
+
+  a_F_h[count] = matrix_new(0,6,0,6,TYPE_INT);
+  a_F_v[count] = matrix_new(0,6,0,6,TYPE_INT);
+  a_F_d[count] = matrix_new(0,6,0,6,TYPE_INT);
+  a_F_m[count] = matrix_new(0,6,0,6,TYPE_INT);
   
+  int * components = (int *) malloc(sizeof(int) * (2 * LIMIT + 1)); 
 
 #if 0
   if(result_size<9*9*4) {
@@ -176,6 +221,17 @@ rmf_compute(int *dct)
   int value1;
   int value2;
 
+  
+  F = a_F[count];
+  M_h = a_M_h[count];
+  M_v = a_M_v[count];
+  M_d = a_M_d[count];
+  M_m = a_M_m[count];
+
+  F_h = a_F_h[count];
+  F_v = a_F_v[count];
+  F_d = a_F_d[count];
+  F_m = a_F_m[count];
 
   matrix_set_int_from_array(F,dct);
   
@@ -317,14 +373,7 @@ rmf_compute(int *dct)
 
   PROBA_DIFF_DEBUG("matrix M_v done\n");
 
-
-
-  /* add(M_h,count); */
-  /* save(M_v,count); */
-  /* save(M_d,count); */
-  /* save(M_m,count); */
-
-  
+  count ++;
 
   return 0;
   
