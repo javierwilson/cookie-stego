@@ -5,6 +5,7 @@
 #include "matrix.h"
 #include "error.h"
 
+
 #define MAX_ARRAYS 100
 
 typedef struct array {
