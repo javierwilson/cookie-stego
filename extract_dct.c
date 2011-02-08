@@ -69,6 +69,7 @@ int extract_dct(char *filename) {
 
 
 
+/*
 struct option long_options[] = {
   {"module", 1, 0, 0},
   {"file", 1, 0, 0},
@@ -77,7 +78,6 @@ struct option long_options[] = {
 
 extern char *optarg;
 
-/*
 int main(int argc, char *argv[]) {
   int opt;
   int option_index = 0;
