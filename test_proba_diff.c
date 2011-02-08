@@ -24,7 +24,15 @@ int main(int argc, char **argv)
   
   
   //  printf("do_extraction()...\n");
-  do_extraction((int *)dct, 8,8, &tab, NB_FEATURES);
+
+  hello_module();
+  init();
+  reset();
+  compute((int *) dct);
+  extract_features((float *) &tab);
+    
+
+  //  do_extraction((int *)dct, 8,8, &tab, NB_FEATURES);
   //  printf("done\n");
 
   return 0;

@@ -10,7 +10,7 @@ proba_diff = cdll.LoadLibrary("libproba_diff.so")
 #libc = cdll.LoadLibrary("libc.so.6")
 
 dct = [ 
-    [ 45, 8, 6, 4, 2, 0, 0, 0 ],
+    [ 200, 10, 6, 4, 2, 0, 0, 0 ],
     [ 4, 4, 2, 1, 0, 0, 0, 0 ],
     [ 3, 3, 1, 1, 0, 0, 0, 0 ],
     [ 2, 2, 0, 0, 0, 0, 0, 0 ],
@@ -34,5 +34,8 @@ nb_features = 9*9*4
 features = array_float_324()
 
 proba_diff.hello_module()
-#proba_diff.test_param(pointer(dct_lin))
-proba_diff.do_extraction(pointer(dct_lin), 8,8, pointer(features), nb_features)
+proba_diff.init()
+proba_diff.reset()
+proba_diff.compute(pointer(dct_lin))
+proba_diff.extract_features(pointer(features))
+
