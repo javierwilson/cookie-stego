@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 
   /*********************** dumb **************************/
   if(!strcmp(algoname,"dumb")) {
-    printf("exit dumb\n");
+
     // initializes module
     dumb_init();
     
@@ -126,29 +126,42 @@ int main(int argc, char *argv[]) {
 
   /*********************** rmf **************************/
   else if(!strcmp(algoname,"rmf")) {
-    printf("exit rmf\n");
-
+    int i;
     param_t param;
+    float *tab;
+    module_t *module;
+
+
+    rmf_hello_module();
     param.nb_dct = size;
-    
+
     // initializes module
     rmf_init();
     
-    // compute sum (dumb feature) for each DCT
     int x,y,z;
+
+    module = rmf_get_module();
+    tab = (float *) malloc(sizeof(float) * module->features);
+
     rmf_reset(&param);
     for (z=0; z<size; z++) {
+      //printf("%d ",z);fflush(stdout);
       rmf_compute((int *) dct[z]);
+      if(z % (size/100) == 0) {
+      	printf("%d%% ", (z *100 / size));fflush(stdout);
+      }
     }
 
-  // get features (average of sum in this case)
-    feature = dumb_get_features();
-    printf("Average of sum of DCTs = %d\n", feature);
+    rmf_get_features(tab);
+    for(i=0;i<module->features;i++) {
+      printf("%f ",tab[i]);
+    }
 
     // free allocations
     rmf_release();
     printf("rmf_release();\n");
   }
 
+  return 0;
 
 }

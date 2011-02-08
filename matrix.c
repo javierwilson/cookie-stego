@@ -5,9 +5,8 @@
 #include "matrix.h"
 #include "error.h"
 
-//#define MATRIX_DEBUG(...) 
-#define MATRIX_DEBUG(...) fprintf(stderr, __VA_ARGS__)
-#define MATRIX_DEBUG(...)
+#define MATRIX_DEBUG(...) 
+//#define MATRIX_DEBUG(...) fprintf(stderr, __VA_ARGS__)
 
 #define MAX_ARRAYS 1000000
 
