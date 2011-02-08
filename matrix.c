@@ -5,6 +5,8 @@
 #include "matrix.h"
 #include "error.h"
 
+//#define MATRIX_DEBUG(...) 
+#define MATRIX_DEBUG(...) fprintf(stderr, __VA_ARGS__)
 
 #define MAX_ARRAYS 1000000
 
@@ -30,6 +32,7 @@ static int max_array;
 int
 matrix_init()
 {
+  MATRIX_DEBUG("matrix_init()\n");
   handles = NULL;
 }
 
@@ -37,6 +40,8 @@ int
 matrix_reset(int max_array)
 {
   int i;
+
+  MATRIX_DEBUG("matrix_reset()\n");
 
   if(handles!=NULL) {
     matrix_delete_all();
@@ -60,6 +65,7 @@ matrix_reset(int max_array)
 int
 matrix_release(void)
 {
+  MATRIX_DEBUG("matrix_release()\n");
   if(handles!=NULL) free(handles);
   return NO_ERROR;
 }
@@ -70,7 +76,12 @@ matrix_new(int min_x, int max_x, int min_y, int max_y, int type)
   int index;
   int size;
 
+
   array_t *array=NULL;
+
+  MATRIX_DEBUG("matrix_new()\n");
+
+
   // find the first free handle
   for(index=1;index<max_array;index++) {
     if(handles[index]==NULL) {
@@ -129,6 +140,10 @@ matrix_new(int min_x, int max_x, int min_y, int max_y, int type)
 int
 matrix_delete(int handle) 
 {
+
+  MATRIX_DEBUG("matrix_delete()\n");
+    
+  
   if(handle>max_array) {
     return ERROR_OVERFLOW;
   }
