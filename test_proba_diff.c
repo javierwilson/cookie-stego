@@ -25,11 +25,11 @@ int main(int argc, char **argv)
   
   //  printf("do_extraction()...\n");
 
-  hello_module();
-  init();
-  reset();
-  compute((int *) dct);
-  extract_features((float *) &tab);
+  rmf_hello_module();
+  rmf_init();
+  rmf_reset();
+  rmf_compute((int *) dct);
+  rmf_extract_features((float *) &tab);
     
 
   //  do_extraction((int *)dct, 8,8, &tab, NB_FEATURES);

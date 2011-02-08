@@ -33,9 +33,9 @@ for j in range(0,8):
 nb_features = 9*9*4
 features = array_float_324()
 
-proba_diff.hello_module()
-proba_diff.init()
-proba_diff.reset()
-proba_diff.compute(pointer(dct_lin))
-proba_diff.extract_features(pointer(features))
+proba_diff.rmf_hello_module()
+proba_diff.rmf_init()
+proba_diff.rmf_reset()
+proba_diff.rmf_compute(pointer(dct_lin))
+proba_diff.rmf_extract_features(pointer(features))
 

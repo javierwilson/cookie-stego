@@ -23,14 +23,14 @@ static int F_m;
 
 
 int
-hello_module()
+rmf_hello_module()
 {
   printf("reduced markov feature\n");
   return 0;
 }
 
 int
-test_param(int *dct)
+rmf_test_param(int *dct)
 {
   int i;
   for(i=0;i<64;i++) {

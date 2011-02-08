@@ -3,26 +3,26 @@
 #define MAX_HANDLE 256
 
 // display the name o the module
-int hello_module();
+int rmf_hello_module();
 
 // test program argument
-int test_param(int *dct);
+int rmf_test_param(int *dct);
 
 // itialize memory usage
-int init(void); 
+int rmf_init(void); 
 
 // free memory
-int release(void);
+int rmf_release(void);
 
 // ready to restart new computations
-int reset(void);
+int rmf_reset(void);
 
 
 // compute from a dct
-int compute(int *dct);
+int rmf_compute(int *dct);
 
 // extract the 324 features
-int extract_features(float *result);
+int rmf_extract_features(float *result);
 
 // create a probability array from the difference
 // and return the handle
