@@ -1,7 +1,11 @@
-#include "extract_dct.h"
+#include <stdio.h>
+#include "common.h"
+
 #include "mod_rmf.h"
 #include "mod_dumb.h"
 
+
+extern int (*dct)[DLEN][DLEN];
 int main(int argc, char *argv[]) {
   int size, feature;
   char * filename = argv[1];

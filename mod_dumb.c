@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "common.h"
+
 static int *sum;
 static int count=0;
 static int tsum=0;

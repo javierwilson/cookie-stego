@@ -1,4 +1,4 @@
-PROGNAME=test_matrix test_mod_rmf extract_dct
+PROGNAME=test_matrix test_mod_rmf cookie
 
 all: matrix.o mod_rmf.o libmod_rmf.so $(PROGNAME)
 
@@ -11,6 +11,8 @@ test_matrix.o: test_matrix.c
 mod_rmf.o: mod_rmf.c
 	gcc -fPIC -c $<
 
+
+
 #mod_rmf.shared.o: mod_rmf.c
 #	gcc -Wall -fPIC -o $@ -c $<
 
@@ -21,9 +23,12 @@ libmod_rmf.so: mod_rmf.o matrix.o
 	gcc -shared -Wl,-soname,$@ -o $@ $^ -lc
 
 extract_dct.o: extract_dct.c
-	gcc -ljpeg -c $<
+	gcc -c $<
 
-extract_dct: extract_dct.o mod_rmf.o matrix.o
+cookie.o: cookie.c
+	gcc -c $<
+
+cookie: cookie.o extract_dct.o mod_dumb.o mod_rmf.o matrix.o
 	gcc -ljpeg -o $@ $^
 
 test_mod_rmf.o: test_mod_rmf.c

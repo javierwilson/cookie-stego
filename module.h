@@ -1,7 +1,16 @@
+#ifndef MODULE_H
+#define MODULE_H
+
+
 typedef struct module_ {
   int features;
 } module_t;
 
+
+typedef struct param_ {
+  int nb_dct;
+} param_t;
+  
 
 struct module_extraction {
   int features;
@@ -10,6 +19,8 @@ struct module_extraction {
   int (*init) (void);
   int (*reset) (void);
   int (*compute) (void);
-  int (*extract_features) (void);
+  int (*get_features) (void);
   int data;
 };
+
+#endif
