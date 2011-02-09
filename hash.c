@@ -19,15 +19,15 @@ void inithashtab(){
 
 // ????????????
 unsigned int hash(int s){
-  unsigned int h=0;
+  //unsigned int h=0;
   //for(;s;s++)
   //  h=s+h*31;
-  return h%HASHSIZE;
+  //return h%HASHSIZE;
+  return 0;
 }
 
 node* lookup(int n){
   unsigned int hi=hash(n);
-  printf("hi = %d", hi);
   node* np=hashtab[hi];
   for(;np!=NULL;np=np->next){
     if(np->name == n)
@@ -75,18 +75,28 @@ void cleanup(){
   }
 }
 
+int hash_get_values(int *values) {
+  int i = 0; 
+  node *t;
+  t=hashtab[0];
+  for(;t!=NULL;t=t->next) {
+    values[i] = t->desc;
+    printf("i=%d = %d\n", i, values[i]);
+    i++;
+  }
+}
+
 void hash_display(){
   int i;
   node *t;
   for(i=0;i<HASHSIZE;i++){
-    if(hashtab[i]==NULL)
-      printf("()");
-    else{
+    if(hashtab[i]==NULL) {
+      printf("()\n");
+      return;
+    } else{
       t=hashtab[i];
-      printf("(");
       for(;t!=NULL;t=t->next)
         printf("(%d,%d) ",t->name,t->desc);
-      printf(")");
     }
   }
 }

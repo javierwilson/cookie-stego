@@ -40,15 +40,20 @@ void histo_compute(int adct[DLEN][DLEN]) {
     for (y=0; y<DLEN; y++) {
       current_value = hash_get(adct[x][y]);
       hash_set(adct[x][y], current_value+1);
+      if(!current_value)
+        count++;
     }
   }
-  count++;
 }
 
-// Return average
-int histo_get_features() {
-  int i;
-  int average = 0;
+// Returns how many *unique* values we have
+int histo_get_count() {
+  return count;
+}
+
+// Returns array of values
+int histo_get_features(int *numbers) {
   hash_display();
+  hash_get_values(numbers);
   return 0;
 }

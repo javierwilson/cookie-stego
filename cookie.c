@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
 		       long_options, &option_index);
 
     if(opt==-1) break;
-    printf("OPT = %d\n", opt); 
     switch (opt) {
     case 0:
       printf ("option %s", long_options[option_index].name);
@@ -95,7 +94,7 @@ int main(int argc, char *argv[]) {
       dumb_compute(dct[z]);
     }
 
-  // get features (average of sum in this case)
+    // get features (average of sum in this case)
     feature = dumb_get_features();
     printf("Average of sum of DCTs = %d\n", feature);
 
@@ -116,9 +115,12 @@ int main(int argc, char *argv[]) {
       histo_compute(dct[z]);
     }
 
-  // get features (average of sum in this case)
-    feature = histo_get_features();
-    printf("Average of sum of DCTs = %d\n", feature);
+    // get features (histogram)
+    int *numbers;
+    numbers = malloc(histo_get_count()*sizeof(int));
+    feature = histo_get_features(numbers);
+    for(z=0; z<feature; z++)
+      printf("%4d\n", numbers[z]);
 
     // free allocations
     histo_release();
