@@ -161,44 +161,46 @@ rmf_reset(param_t *param)
 }
 
 int
-rmf_get_features(float *result)
+rmf_get_features(float *result_float)
 {
+
+  double result[9*9*4]
 
   MOD_RMF_DEBUG("rmf_get_feature()\n");
 
   int i,j,k,c;
-  float fvalue;
+  double fvalue;
   
   for(k=0;k<9*9*4;k++) {
-    result[k]=0;
+    result[k]=0.0;
   }
 
   for(c=0;c<count;c++) {
-    M_h = a_M_h[count];
-    M_v = a_M_v[count];
-    M_d = a_M_d[count];
-    M_m = a_M_m[count];
+    M_h = a_M_h[c];
+    M_v = a_M_v[c];
+    M_d = a_M_d[c];
+    M_m = a_M_m[c];
     
     k=0;
 
 
     for(j=-4;j<=4;j++) {
       for(i=-4;i<=4;i++,k++) {
-	matrix_get_float(M_h,i,j,&fvalue);
+	matrix_get_double(M_h,i,j,&fvalue);
 	result[k] = result[k] + fvalue;
       }
     }
 
     for(j=-4;j<=4;j++) {
       for(i=-4;i<=4;i++,k++) {
-	matrix_get_float(M_v,i,j,&fvalue);
+	matrix_get_double(M_v,i,j,&fvalue);
 	result[k] = result[k] + fvalue;
       }
     }
 
     for(j=-4;j<=4;j++) {
       for(i=-4;i<=4;i++,k++) {
-	matrix_get_float(M_d,i,j,&fvalue);
+	matrix_get_double(M_d,i,j,&fvalue);
 	result[k] = result[k] + fvalue;
       }
     }
@@ -206,16 +208,22 @@ rmf_get_features(float *result)
 
     for(j=-4;j<=4;j++) {
       for(i=-4;i<=4;i++,k++) {
-	matrix_get_float(M_m,i,j,&fvalue);
+	matrix_get_double(M_m,i,j,&fvalue);
 	result[k] = result[k] + fvalue;
       }
     }
   }
   //  int * components = (int *) malloc(sizeof(int) * (2 * LIMIT + 1)); 
 
+
   for(k=0;k<9*9*4;k++) {
     result[k] = result[k] / count;
   }
+
+  for(k=0;k<9*9*4;k++) {
+    result_float[k]=result[k];
+  }
+
 
 
   return 0;
@@ -232,10 +240,10 @@ rmf_compute(int *dct)
   a_F[count] = matrix_new(0,7,0,7,TYPE_INT);
 
   // should be from -4 to 4 instead of -128 to LIMIT
-  a_M_h[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
-  a_M_v[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
-  a_M_d[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
-  a_M_m[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_FLOAT);
+  a_M_h[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_DOUBLE);
+  a_M_v[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_DOUBLE);
+  a_M_d[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_DOUBLE);
+  a_M_m[count] = matrix_new(-LIMIT,LIMIT,-LIMIT,LIMIT,TYPE_DOUBLE);
 
   a_F_h[count] = matrix_new(0,6,0,6,TYPE_INT);
   a_F_v[count] = matrix_new(0,6,0,6,TYPE_INT);
@@ -253,8 +261,8 @@ rmf_compute(int *dct)
   
   int denominator;
   int numerator;
-  float sum;
-
+  double sum;
+  double fvalue;
   
   int value;
   int value1;
@@ -333,10 +341,7 @@ rmf_compute(int *dct)
 	for(v=0;v<7;v++) {
 	  matrix_get_int(F_h,u,v,&value);
 	  if(value==i) {
-	    matrix_get_int(F_h,u+1,v,&value);
-	    if(value==j) {
-	      denominator++; // perhaps numerator can be computed here also
-	    }
+	    denominator++; // perhaps numerator can be computed here also
 	  }
 	}
       }
@@ -354,17 +359,24 @@ rmf_compute(int *dct)
 	    }
 	  }
 	}
-	sum = sum + ((float)numerator)/((float) denominator);
-	matrix_set_float(M_h,i,j,((float)numerator)/((float) denominator));
+	fvalue = ((double)numerator)/((double) denominator);
+	sum = sum + fvalue;
+	matrix_set_double(M_h,i,j,fvalue);
+	/* if(fvalue > 0.01) { */
+	/*   printf("fvalue = %f = %d/%d\n", fvalue, numerator, denominator); */
+	/* } */
       }
       else {
-	matrix_set_float(M_h,i,j,0.0); // not sure that is zero
+	matrix_set_double(M_h,i,j,0.0); // not sure that is zero
       }
     }
   }
 
   //  matrix_printf(M_h);
-  matrix_scale_float(M_h, 1.0/sum);
+  //  printf("sum = %f\n", sum);
+  if(sum!=0.0) {
+    //matrix_scale_double(M_h, 1.0/sum);
+  }
   //  matrix_printf(M_h);
 
 
@@ -381,10 +393,7 @@ rmf_compute(int *dct)
 	for(v=1;v<S_v-2;v++) {
 	  matrix_get_int(F_v,u,v,&value);
 	  if(value==i) {
-	    matrix_get_int(F_v,u,v+1,&value);
-	    if(value==j) {
-	      denominator++;
-	    }
+	    denominator++;
 	  }
 	}
       }
@@ -395,17 +404,21 @@ rmf_compute(int *dct)
 	  for(v=1;v<S_v;v++) {
 	    matrix_get_int(F_v,u,v,&value);
 	    if(value==i) {
-	      matrix_get_int(F_v,u+1,v,&value);
+	      matrix_get_int(F_v,u,v+1,&value);
 	      if(value==j) {
 		numerator++;
 	      }
 	    }
 	  }
 	}
-	matrix_set_float(M_v,i,j,((float)numerator)/((float) denominator));
+	fvalue = ((double)numerator)/((double) denominator);
+	matrix_set_double(M_v,i,j,fvalue);
+	/* if(fvalue > 0.01) { */
+	/*   printf("fvalue = %f = %d/%d\n", fvalue, numerator, denominator); */
+	/* } */
       }
       else {
-	matrix_set_float(M_v,i,j,0.0); // not sure that is zero
+	matrix_set_double(M_v,i,j,0.0); // not sure that is zero
       }
     }
   }
