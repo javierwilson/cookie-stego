@@ -12,6 +12,8 @@
 struct option long_options[] = {
   {"module", 1, 0, 0},
   {"file", 1, 0, 1},
+  {"svmfile", 1, 0, 0},
+  {"steg", 1, 0, 0},
   {0, 0, 0, 0}
 };
 
@@ -21,9 +23,11 @@ extern char *optarg;
 extern int (*dct)[DLEN][DLEN];
 int main(int argc, char *argv[]) {
   module_t *module;
+  int steg = 0;
 
   int size, feature;
   char filename[MAXLEN_FILENAME];
+  char svmfilename[MAXLEN_FILENAME];
   char algoname[MAXLEN_ALGONAME];
   filename[0] = 0;
   
@@ -66,6 +70,29 @@ int main(int argc, char *argv[]) {
 	printf("Error : filename too long\n");
 	exit(0);
       }
+      break;
+
+    case 2:
+      printf ("option %s", long_options[option_index].name);
+      if (optarg)
+	printf (" with arg %s", optarg);
+      printf ("\n");
+      if(strlen(optarg)<MAXLEN_FILENAME) {
+	strcpy(svmfilename,optarg);
+      }
+      else {
+	printf("Error : filename too long\n");
+	exit(0);
+      }
+      break;
+
+    case 3:
+      printf ("option %s", long_options[option_index].name);
+      if (optarg)
+	printf (" with arg %s", optarg);
+      printf ("\n");
+      steg = atoi(optarg);
+
       break;
     }
   }
@@ -138,6 +165,7 @@ int main(int argc, char *argv[]) {
     module_t *module;
 
 
+    printf("applying ");
     rmf_hello_module();
     param.nb_dct = size;
 
@@ -157,15 +185,18 @@ int main(int argc, char *argv[]) {
       	printf("%d%% ", (z *100 / size));fflush(stdout);
       }
     }
+    printf("\n");
 
     rmf_get_features(tab);
+
+    printf("Features:\n");
     for(i=0;i<module->features;i++) {
       printf("%f ",tab[i]);
     }
+    printf("end\n");
 
     // free allocations
     rmf_release();
-    printf("rmf_release();\n");
   }
 
   return 0;
