@@ -8,4 +8,4 @@ $ ./cookie --file=sample50.jpg --module=histo>sample50.dat
 $ ./cookie --file=sample50-stego.jpg --module=histo>sample50-stego.dat
 $ gnuplot
 gnuplot> set yrange [0:1000]
-gnuplot> plot "sample50.dat" using 1:2 title 'Cover' with lines, "sample50-stego.dat" using 1:2 title 'Stego'
+gnuplot> plot "sample50-stego.dat" using 1:2 title 'Stego', "sample50.dat" using 1:2 title 'Cover' with lines

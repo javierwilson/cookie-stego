@@ -1,9 +1,6 @@
 PROGNAME=test_matrix test_mod_rmf cookie
 
-all: matrix.o mod_rmf.o libmod_rmf.so $(PROGNAME)
-
-hash.o: hash.c hash.h
-	gcc -fPIC -c $<
+all: hide matrix.o mod_rmf.o libmod_rmf.so $(PROGNAME)
 
 matrix.o: matrix.c matrix.h
 	gcc -fPIC -c $<
@@ -14,7 +11,9 @@ test_matrix.o: test_matrix.c
 mod_rmf.o: mod_rmf.c
 	gcc -fPIC -c $<
 
-
+hide: hide.c unhide.c hide.h
+	gcc -ljpeg -o hide hide.c
+	gcc -ljpeg -o unhide unhide.c
 
 #mod_rmf.shared.o: mod_rmf.c
 #	gcc -Wall -fPIC -o $@ -c $<
