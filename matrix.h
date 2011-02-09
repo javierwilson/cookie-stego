@@ -13,5 +13,7 @@ int matrix_set_int(int handle, int i, int j, int value);
 int matrix_get_int(int handle, int i, int j, int *value);
 int matrix_set_float(int handle, int i, int j, float value);
 int matrix_get_float(int handle, int i, int j, float *value);
+int matrix_scale_float(int handle, float scale);
 int matrix_set_double(int handle, int i, int j, double value);
 int matrix_get_double(int handle, int i, int j, double *value);
+int matrix_scale_double(int handle, double scale);
