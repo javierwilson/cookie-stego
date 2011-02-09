@@ -12,8 +12,8 @@
 struct option long_options[] = {
   {"module", 1, 0, 0},
   {"file", 1, 0, 1},
-  {"svmfile", 1, 0, 0},
-  {"steg", 1, 0, 0},
+  {"svm", 1, 0, 2},
+  {"steg", 1, 0, 3},
   {0, 0, 0, 0}
 };
 
@@ -23,16 +23,27 @@ extern char *optarg;
 extern int (*dct)[DLEN][DLEN];
 int main(int argc, char *argv[]) {
   module_t *module;
+  void *result; // future : use for rmf,dumb,histo : 
+                // it is an array of everything
+  int type;     // float,int,double... for result[]
+  int size_result;
+
+
   int steg = 0;
 
   int size, feature;
   char filename[MAXLEN_FILENAME];
   char svmfilename[MAXLEN_FILENAME];
+  int outfile;
   char algoname[MAXLEN_ALGONAME];
   filename[0] = 0;
-  
+  svmfilename[0] = 0;  
   int opt;
   int option_index = 0;
+
+  FILE *svmfile = NULL;
+    
+
 
   // set default option
 
@@ -40,59 +51,51 @@ int main(int argc, char *argv[]) {
 
 
   for(;;) {
-    opt = getopt_long (argc, argv, "012",
+    opt = getopt_long (argc, argv, "01234",
 		       long_options, &option_index);
 
     if(opt==-1) break;
     switch (opt) {
     case 0:
-      printf ("option %s", long_options[option_index].name);
-      if (optarg)
-	printf (" with arg %s", optarg);
-      printf ("\n");
-      if(strlen(optarg)<MAXLEN_ALGONAME) {
+      //printf ("option %s", long_options[option_index].name);
+      if (optarg) {
+	if(strlen(optarg)<MAXLEN_ALGONAME) {
 	strcpy(algoname,optarg);
+	}
       }
       else {
-	printf("Error : algoname too long\n");
+	printf("Error : module name too long\n");
 	exit(0);
       }
       break;
     case 1:
-      printf ("option %s", long_options[option_index].name);
-      if (optarg)
-	printf (" with arg %s", optarg);
-      printf ("\n");
-      if(strlen(optarg)<MAXLEN_FILENAME) {
-	strcpy(filename,optarg);
-      }
-      else {
-	printf("Error : filename too long\n");
-	exit(0);
+      if (optarg) {
+	if(strlen(optarg)<MAXLEN_FILENAME) {
+	  strcpy(filename,optarg);
+	}
+	else {
+	  printf("Error : filename too long\n");
+	  exit(0);
+	}
       }
       break;
-
+      
     case 2:
-      printf ("option %s", long_options[option_index].name);
-      if (optarg)
-	printf (" with arg %s", optarg);
-      printf ("\n");
-      if(strlen(optarg)<MAXLEN_FILENAME) {
-	strcpy(svmfilename,optarg);
-      }
-      else {
-	printf("Error : filename too long\n");
-	exit(0);
+      if (optarg) {
+	if(strlen(optarg)<MAXLEN_FILENAME) {
+	  strcpy(svmfilename,optarg);
+	}
+	else {
+	  printf("Error : svm filename too long\n");
+	  exit(0);
+	}
       }
       break;
 
     case 3:
-      printf ("option %s", long_options[option_index].name);
-      if (optarg)
-	printf (" with arg %s", optarg);
-      printf ("\n");
-      steg = atoi(optarg);
-
+      if (optarg) {
+	steg = atoi(optarg);
+      }
       break;
     }
   }
@@ -161,9 +164,7 @@ int main(int argc, char *argv[]) {
   else if(!strcmp(algoname,"rmf")) {
     int i;
     param_t param;
-    float *tab;
-    module_t *module;
-
+    float *tab; // used for rmf = result
 
     printf("applying ");
     rmf_hello_module();
@@ -175,29 +176,46 @@ int main(int argc, char *argv[]) {
     int x,y,z;
 
     module = rmf_get_module();
-    tab = (float *) malloc(sizeof(float) * module->features);
-
+    result = (void *) malloc(sizeof(float) * module->features);
+    tab = (float *) result;
     rmf_reset(&param);
     for (z=0; z<size; z++) {
       //printf("%d ",z);fflush(stdout);
       rmf_compute((int *) dct[z]);
-      if(z % (size/100) == 0) {
-      	printf("%d%% ", (z *100 / size));fflush(stdout);
+      if(z % (size/100) == 1) {
+      	printf("%d%% ", (1 + z *100 / size));fflush(stdout);
       }
     }
     printf("\n");
 
     rmf_get_features(tab);
-
-    printf("Features:\n");
-    for(i=0;i<module->features;i++) {
-      printf("%f ",tab[i]);
-    }
-    printf("end\n");
-
+    size_result = module->features;
     // free allocations
     rmf_release();
   }
+
+
+  if(svmfilename[0]!=0) {
+    int i;
+    svmfile = fopen(svmfilename,"w");
+    if(svmfile != NULL) {
+      fprintf(svmfile, "%f ",(float) steg);
+      
+      if(!strcmp(algoname,"rmf")) {
+	float *tab = result;
+	for(i=0;i<size_result;i++) {
+	  fprintf(svmfile, "%d:%f ",i+1, tab[i]);
+	}
+      }
+      fprintf(svmfile, "\n");
+      fclose(svmfile);
+    }
+    else {
+      printf("Cannot open file %s \n", svmfilename);
+    }
+  }
+  
+  free(result);
 
   return 0;
 
