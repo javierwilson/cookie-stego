@@ -60,7 +60,7 @@ int histo_get_features(int *numbers, int *freq) {
   for(i=0; i<count; i++) {
     //printf("Number %d shown %d times\n",keys[i],hash_get(keys[i]));
     freq[i] = hash_get(numbers[i]);
-    printf("%d:%d\n",numbers[i], freq[i]);
+    printf("%d %d\n",numbers[i], freq[i]);
   }
   return 0;
 }
