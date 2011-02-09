@@ -59,8 +59,9 @@ int extract_dct(char *filename) {
           dct[index][j][i%DLEN] = coef_buffers[compnum][0][blocknum][i];
           EXTRACT_DCT_DEBUG("%4d ", coef_buffers[compnum][0][blocknum][i]);
 #ifdef EXTRACT_DCT_DEBUG_OPT
-          if ((i+1)%DLEN==0) { printf("\n"); j++; }
+          if ((i+1)%DLEN==0) { printf("\n"); }
 #endif
+          if ((i+1)%DLEN==0) { j++; }
         }
         index++;
         EXTRACT_DCT_DEBUG("\n");
