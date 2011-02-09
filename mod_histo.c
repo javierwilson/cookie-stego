@@ -52,9 +52,15 @@ int histo_get_count() {
 }
 
 // Returns array of values
-int histo_get_features(int *numbers) {
+int histo_get_features(int *numbers, int *freq) {
   //hash_display();
   hash_get_keys(numbers, count);
-  //hash_get_values(numbers);
+  //hash_get_values(freq, count);
+  int i;
+  for(i=0; i<count; i++) {
+    //printf("Number %d shown %d times\n",keys[i],hash_get(keys[i]));
+    freq[i] = hash_get(numbers[i]);
+    printf("%d:%d\n",numbers[i], freq[i]);
+  }
   return 0;
 }

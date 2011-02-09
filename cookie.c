@@ -113,6 +113,7 @@ int main(int argc, char *argv[]) {
 
   /*********************** dumb **************************/
   if(!strcmp(algoname,"dumb")) {
+    dumb_hello_module();
 
     // initializes module
     dumb_init();
@@ -134,7 +135,11 @@ int main(int argc, char *argv[]) {
 
   /*********************** histo **************************/
   if(!strcmp(algoname,"histo")) {
-    printf("exit histo\n");
+    int *tab; // used for result
+
+    printf("applying ");
+    histo_hello_module();
+
     // initializes module
     histo_init();
     
@@ -146,15 +151,12 @@ int main(int argc, char *argv[]) {
     }
 
     // get features (histogram)
+    size_result = histo_get_count();
     int *numbers;
-    numbers = malloc(histo_get_count()*sizeof(int));
-    feature = histo_get_features(numbers);
-
-    int i;
-    for(i=0; i<histo_get_count(); i++) {
-      //printf("Number %d shown %d times\n",keys[i],hash_get(keys[i]));
-      printf("%d %d\n",numbers[i],hash_get(numbers[i]));
-    }
+    numbers = malloc(size_result*sizeof(int));
+    result = (void *) malloc(size_result*sizeof(int));
+    tab = (int *) result;
+    histo_get_features(numbers, tab);
 
     // free allocations
     histo_release();
@@ -195,12 +197,19 @@ int main(int argc, char *argv[]) {
   }
 
 
+  /*********************** SVM **************************/
   if(svmfilename[0]!=0) {
     int i;
     svmfile = fopen(svmfilename,"w");
     if(svmfile != NULL) {
       fprintf(svmfile, "%f ",(float) steg);
       
+      if(!strcmp(algoname,"histo")) {
+	int *tab = result;
+	for(i=0;i<size_result;i++) {
+	  fprintf(svmfile, "%d:%d ",i+1, tab[i]);
+	}
+      }
       if(!strcmp(algoname,"rmf")) {
 	float *tab = result;
 	for(i=0;i<size_result;i++) {
