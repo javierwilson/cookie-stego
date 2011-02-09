@@ -362,9 +362,6 @@ rmf_compute(int *dct)
 	dvalue = ((double)numerator)/((double) denominator);
 	sum = sum + dvalue;
 	matrix_set_double(M_h,i,j,dvalue);
-	/* if(dvalue > 0.01) { */
-	/*   printf("dvalue = %f = %d/%d\n", dvalue, numerator, denominator); */
-	/* } */
       }
       else {
 	matrix_set_double(M_h,i,j,0.0); // not sure that is zero
@@ -372,15 +369,9 @@ rmf_compute(int *dct)
     }
   }
 
-  //  matrix_printf(M_h);
-  //  printf("sum = %f\n", sum);
   if(sum!=0.0) {
     matrix_scale_double(M_h, 1.0/sum);
   }
-  //  matrix_printf(M_h);
-
-
- 
  
   MOD_RMF_DEBUG("matrix M_h done\n");
 
@@ -413,9 +404,6 @@ rmf_compute(int *dct)
 	}
 	dvalue = ((double)numerator)/((double) denominator);
 	matrix_set_double(M_v,i,j,dvalue);
-	if(dvalue > 0.01) {
-	  //	  printf("dvalue = %f = %d/%d\n", dvalue, numerator, denominator); 
-	}
       }
       else {
 	matrix_set_double(M_v,i,j,0.0); // not sure that is zero
@@ -424,6 +412,84 @@ rmf_compute(int *dct)
   }
 
   MOD_RMF_DEBUG("matrix M_v done\n");
+
+
+  // matrix M_d
+  sum = 0.0;
+  for(i=-LIMIT;i<=LIMIT;i++) {
+    for(j=-LIMIT;j<=LIMIT;j++) {
+      denominator = 0;
+      for(u=0;u<6;u++) {
+	for(v=0;v<6;v++) {
+	  matrix_get_int(F_d,u,v,&value);
+	  if(value==i) {
+	    denominator++;
+	  }
+	}
+      }
+      if(denominator != 0) { 
+      
+	numerator = 0;
+	for(u=0;u<6;u++) {
+	  for(v=0;v<6;v++) {
+	    matrix_get_int(F_d,u,v,&value);
+	    if(value==i) {
+	      matrix_get_int(F_d,u+1,v+1,&value);
+	      if(value==j) {
+		numerator++;
+	      }
+	    }
+	  }
+	}
+	dvalue = ((double)numerator)/((double) denominator);
+	matrix_set_double(M_d,i,j,dvalue);
+      }
+      else {
+	matrix_set_double(M_d,i,j,0.0); // not sure that is zero
+      }
+    }
+  }
+
+  MOD_RMF_DEBUG("matrix M_d done\n");
+
+  // matrix M_d
+  sum = 0.0;
+  for(i=-LIMIT;i<=LIMIT;i++) {
+    for(j=-LIMIT;j<=LIMIT;j++) {
+      denominator = 0;
+      for(u=0;u<6;u++) {
+	for(v=0;v<6;v++) {
+	  matrix_get_int(F_m,u,v,&value);
+	  if(value==i) {
+	    denominator++;
+	  }
+	}
+      }
+      if(denominator != 0) { 
+      
+	numerator = 0;
+	for(u=0;u<6;u++) {
+	  for(v=0;v<6;v++) {
+	    matrix_get_int(F_m,u+1,v,&value);
+	    if(value==i) {
+	      matrix_get_int(F_m,u,v+1,&value);
+	      if(value==j) {
+		numerator++;
+	      }
+	    }
+	  }
+	}
+	dvalue = ((double)numerator)/((double) denominator);
+	matrix_set_double(M_m,i,j,dvalue);
+      }
+      else {
+	matrix_set_double(M_m,i,j,0.0); // not sure that is zero
+      }
+    }
+  }
+
+  MOD_RMF_DEBUG("matrix M_m done\n");
+
 
   count ++;
 
