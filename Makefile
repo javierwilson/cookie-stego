@@ -11,7 +11,7 @@ test_matrix.o: test_matrix.c
 mod_rmf.o: mod_rmf.c
 	gcc -fPIC -c $<
 
-hide: hide.c unhide.c
+hide: hide.c unhide.c hide.h
 	gcc -ljpeg -o hide hide.c
 	gcc -ljpeg -o unhide unhide.c
 

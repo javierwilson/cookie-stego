@@ -12,7 +12,7 @@ int main (int argc, char **argv) {
 
   filenamei = argv[1];
   filenameo = argv[2];
-  strncpy(secret,argv[3],255);
+  strncpy(secret,argv[3],MAX_SECRET_LEN-1);
   srcinfo.err = jpeg_std_error(&jsrcerr);
   jpeg_create_decompress(&srcinfo);
   dstinfo.err = jpeg_std_error(&jdsterr);

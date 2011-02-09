@@ -20,7 +20,7 @@ int main (int argc, char **argv) {
   jpeg_stdio_src(&srcinfo, input_file);
   (void) jpeg_read_header(&srcinfo, TRUE);
   coef_arrays = jpeg_read_coefficients(&srcinfo);
-  int l=255,j=0,k=0,done=0;
+  int l=MAX_SECRET_LEN,j=0,k=0,done=0;
   for (compnum=0; compnum<srcinfo.num_components; compnum++) {
     if (done == 1) { break; }
     for (rownum=0; rownum<srcinfo.comp_info[compnum].height_in_blocks; rownum++) {

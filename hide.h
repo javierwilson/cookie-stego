@@ -13,5 +13,5 @@
   FILE * output_file;
   char * filenamei;
   char * filenameo;
-  char secret[256];
-
+#define MAX_SECRET_LEN 1000
+  char secret[MAX_SECRET_LEN];
