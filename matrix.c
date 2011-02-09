@@ -127,6 +127,9 @@ matrix_new(int min_x, int max_x, int min_y, int max_y, int type)
   else if(array->data_type==TYPE_FLOAT) {
     size = sizeof(float);
   }
+  else if(array->data_type==TYPE_DOUBLE) {
+    size = sizeof(double);
+  }
 
   array->data = (int *) malloc(size*(max_x-min_x+1)*(max_y-min_y+1));
   
@@ -348,10 +351,103 @@ matrix_scale_float(int handle, float scale)
 
   tab = (float *) matrix->data;
   for(i=0;i<size;i++) {
-    tab[i] = tab[i] * scale;
+    if(tab[i]!=0.0) {
+      //      printf("change %f to ",tab[i]);
+      tab[i] = tab[i] * scale;
+      //      printf("%f\n",tab[i]);
+    }
   }
   return 0;
 }
+
+
+//***********************************************
+int
+matrix_set_double(int handle, int i, int j, double value)
+{
+  array_t *matrix;
+  double *data;
+  int idx;
+
+  if(handle>=max_array) {
+    return ERROR_OVERFLOW;
+  }
+  
+  if(handles[handle]==NULL) {
+    return ERROR_NO_REFERENCE;
+  }
+  
+  matrix = handles[handle];
+  
+  if((matrix->min_x>i) || (matrix->min_y>j)
+     ||(matrix->max_x<i) || (matrix->max_y<j)) {
+    return ERROR_OVERFLOW;
+  }
+
+  data = (double *) matrix->data;
+  
+  idx = compute_index(handle, i, j);
+  
+  data[idx] = value;
+
+  return NO_ERROR;
+}
+
+
+int matrix_get_double(int handle, int i, int j, double *value)
+{
+  array_t *matrix;
+  double *data;
+  int idx;
+
+  if(handle>=max_array) {
+    return ERROR_OVERFLOW;
+  }
+  
+  if(handles[handle]==NULL) {
+    return ERROR_NO_REFERENCE;
+  }
+  
+  matrix = handles[handle];
+  
+  if((matrix->min_x>i) || (matrix->min_y>j)
+     ||(matrix->max_x<i) || (matrix->max_y<j)) {
+    return ERROR_OVERFLOW;
+  }
+
+  data = (double *) matrix->data;
+  
+  idx = compute_index(handle, i, j);
+  
+  *value = data[idx];
+
+  return NO_ERROR;
+
+}
+
+int
+matrix_scale_double(int handle, double scale)
+{
+  int i,size;
+  float *tab;
+  
+  array_t *matrix=handles[handle];
+  size = matrix->width * matrix->height;
+
+  tab = (float *) matrix->data;
+  for(i=0;i<size;i++) {
+    if(tab[i]!=0.0) {
+      //      printf("change %f to ",tab[i]);
+      tab[i] = tab[i] * scale;
+      //      printf("%f\n",tab[i]);
+    }
+  }
+  return 0;
+}
+
+
+//**********************************************
+
 
 int
 matrix_printf(int handle)

@@ -1,6 +1,6 @@
 #define TYPE_INT    1
 #define TYPE_FLOAT  2
-
+#define TYPE_DOUBLE 3
 
 int matrix_init(void);
 int matrix_reset(int max_array);
@@ -13,3 +13,5 @@ int matrix_set_int(int handle, int i, int j, int value);
 int matrix_get_int(int handle, int i, int j, int *value);
 int matrix_set_float(int handle, int i, int j, float value);
 int matrix_get_float(int handle, int i, int j, float *value);
+int matrix_set_double(int handle, int i, int j, double value);
+int matrix_get_double(int handle, int i, int j, double *value);
