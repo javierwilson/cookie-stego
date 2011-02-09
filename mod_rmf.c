@@ -303,7 +303,7 @@ rmf_compute(int *dct)
       matrix_get_int(F, i, j, &value1);
       matrix_get_int(F, i, j+1, &value2);
       value = value1 - value2;
-      matrix_set_int(F_h, i, j, value);
+      matrix_set_int(F_v, i, j, value);
     }
   }
 
@@ -313,7 +313,7 @@ rmf_compute(int *dct)
       matrix_get_int(F, i, j, &value1);
       matrix_get_int(F, i+1, j+1, &value2);
       value = value1 - value2;
-      matrix_set_int(F_h, i, j, value);
+      matrix_set_int(F_d, i, j, value);
     }
   }
 
@@ -324,7 +324,7 @@ rmf_compute(int *dct)
       matrix_get_int(F, i+1, j, &value1);
       matrix_get_int(F, i, j+1, &value2);
       value = value1 - value2;
-      matrix_set_int(F_h, i, j, value);
+      matrix_set_int(F_m, i, j, value);
     }
   }
 
@@ -375,7 +375,7 @@ rmf_compute(int *dct)
   //  matrix_printf(M_h);
   //  printf("sum = %f\n", sum);
   if(sum!=0.0) {
-    //matrix_scale_double(M_h, 1.0/sum);
+    matrix_scale_double(M_h, 1.0/sum);
   }
   //  matrix_printf(M_h);
 
@@ -385,12 +385,12 @@ rmf_compute(int *dct)
   MOD_RMF_DEBUG("matrix M_h done\n");
 
   // matrix M_v
+  sum = 0.0;
   for(i=-LIMIT;i<=LIMIT;i++) {
     for(j=-LIMIT;j<=LIMIT;j++) {
-
       denominator = 0;
-      for(u=1;u<S_u;u++) {
-	for(v=1;v<S_v-2;v++) {
+      for(u=0;u<7;u++) {
+	for(v=0;v<6;v++) {
 	  matrix_get_int(F_v,u,v,&value);
 	  if(value==i) {
 	    denominator++;
@@ -400,8 +400,8 @@ rmf_compute(int *dct)
       if(denominator != 0) { 
       
 	numerator = 0;
-	for(u=1;u<S_u-2;u++) {
-	  for(v=1;v<S_v;v++) {
+	for(u=0;u<7;u++) {
+	  for(v=0;v<6;v++) {
 	    matrix_get_int(F_v,u,v,&value);
 	    if(value==i) {
 	      matrix_get_int(F_v,u,v+1,&value);
@@ -413,9 +413,9 @@ rmf_compute(int *dct)
 	}
 	dvalue = ((double)numerator)/((double) denominator);
 	matrix_set_double(M_v,i,j,dvalue);
-	/* if(dvalue > 0.01) { */
-	/*   printf("dvalue = %f = %d/%d\n", dvalue, numerator, denominator); */
-	/* } */
+	if(dvalue > 0.01) {
+	  //	  printf("dvalue = %f = %d/%d\n", dvalue, numerator, denominator); 
+	}
       }
       else {
 	matrix_set_double(M_v,i,j,0.0); // not sure that is zero
