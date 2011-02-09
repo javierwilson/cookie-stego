@@ -53,7 +53,8 @@ int histo_get_count() {
 
 // Returns array of values
 int histo_get_features(int *numbers) {
-  hash_display();
-  hash_get_values(numbers);
+  //hash_display();
+  hash_get_keys(numbers, count);
+  //hash_get_values(numbers);
   return 0;
 }

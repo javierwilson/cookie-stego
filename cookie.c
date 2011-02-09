@@ -119,8 +119,12 @@ int main(int argc, char *argv[]) {
     int *numbers;
     numbers = malloc(histo_get_count()*sizeof(int));
     feature = histo_get_features(numbers);
-    for(z=0; z<feature; z++)
-      printf("%4d\n", numbers[z]);
+
+    int i;
+    for(i=0; i<histo_get_count(); i++) {
+      //printf("Number %d shown %d times\n",keys[i],hash_get(keys[i]));
+      printf("%d %d\n",numbers[i],hash_get(numbers[i]));
+    }
 
     // free allocations
     histo_release();

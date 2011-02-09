@@ -75,13 +75,27 @@ void cleanup(){
   }
 }
 
+int sort(const void *x, const void *y) {
+  return (*(int*)x - *(int*)y);
+}
+
+int hash_get_keys(int *keys, int count) {
+  int i = 0; 
+  node *t;
+  t=hashtab[0];
+  for(;t!=NULL;t=t->next) {
+    keys[i] = t->name;
+    i++;
+  }
+  qsort(keys, count, sizeof(int), sort);
+}
+
 int hash_get_values(int *values) {
   int i = 0; 
   node *t;
   t=hashtab[0];
   for(;t!=NULL;t=t->next) {
     values[i] = t->desc;
-    printf("i=%d = %d\n", i, values[i]);
     i++;
   }
 }
