@@ -360,8 +360,6 @@ matrix_scale_float(int handle, float scale)
   return 0;
 }
 
-
-//***********************************************
 int
 matrix_set_double(int handle, int i, int j, double value)
 {
@@ -429,12 +427,12 @@ int
 matrix_scale_double(int handle, double scale)
 {
   int i,size;
-  float *tab;
+  double *tab;
   
   array_t *matrix=handles[handle];
   size = matrix->width * matrix->height;
 
-  tab = (float *) matrix->data;
+  tab = (double *) matrix->data;
   for(i=0;i<size;i++) {
     if(tab[i]!=0.0) {
       //      printf("change %f to ",tab[i]);
@@ -446,15 +444,13 @@ matrix_scale_double(int handle, double scale)
 }
 
 
-//**********************************************
-
-
 int
 matrix_printf(int handle)
 {
   int i;
   int j;
   float value_float;
+  double value_double;
   int value_int;
   
   array_t *matrix=handles[handle];
@@ -470,6 +466,11 @@ matrix_printf(int handle)
 	matrix_get_float(handle,i,j,&value_float);
 	printf("%08f",value_float);
       }
+      else if(matrix->data_type==TYPE_DOUBLE) {
+	matrix_get_float(handle,i,j,&value_float);
+	printf("%08f",value_float);
+      }
+
       printf(" ");
     }
     printf("\n");
