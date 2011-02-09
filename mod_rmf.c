@@ -169,7 +169,7 @@ rmf_get_features(float *result_float)
   MOD_RMF_DEBUG("rmf_get_feature()\n");
 
   int i,j,k,c;
-  double fvalue;
+  double dvalue;
   
   for(k=0;k<9*9*4;k++) {
     result[k]=0.0;
@@ -186,30 +186,30 @@ rmf_get_features(float *result_float)
 
     for(j=-4;j<=4;j++) {
       for(i=-4;i<=4;i++,k++) {
-	matrix_get_double(M_h,i,j,&fvalue);
-	result[k] = result[k] + fvalue;
+	matrix_get_double(M_h,i,j,&dvalue);
+	result[k] = result[k] + dvalue;
       }
     }
 
     for(j=-4;j<=4;j++) {
       for(i=-4;i<=4;i++,k++) {
-	matrix_get_double(M_v,i,j,&fvalue);
-	result[k] = result[k] + fvalue;
+	matrix_get_double(M_v,i,j,&dvalue);
+	result[k] = result[k] + dvalue;
       }
     }
 
     for(j=-4;j<=4;j++) {
       for(i=-4;i<=4;i++,k++) {
-	matrix_get_double(M_d,i,j,&fvalue);
-	result[k] = result[k] + fvalue;
+	matrix_get_double(M_d,i,j,&dvalue);
+	result[k] = result[k] + dvalue;
       }
     }
 
 
     for(j=-4;j<=4;j++) {
       for(i=-4;i<=4;i++,k++) {
-	matrix_get_double(M_m,i,j,&fvalue);
-	result[k] = result[k] + fvalue;
+	matrix_get_double(M_m,i,j,&dvalue);
+	result[k] = result[k] + dvalue;
       }
     }
   }
@@ -262,7 +262,7 @@ rmf_compute(int *dct)
   int denominator;
   int numerator;
   double sum;
-  double fvalue;
+  double dvalue;
   
   int value;
   int value1;
@@ -359,11 +359,11 @@ rmf_compute(int *dct)
 	    }
 	  }
 	}
-	fvalue = ((double)numerator)/((double) denominator);
-	sum = sum + fvalue;
-	matrix_set_double(M_h,i,j,fvalue);
-	/* if(fvalue > 0.01) { */
-	/*   printf("fvalue = %f = %d/%d\n", fvalue, numerator, denominator); */
+	dvalue = ((double)numerator)/((double) denominator);
+	sum = sum + dvalue;
+	matrix_set_double(M_h,i,j,dvalue);
+	/* if(dvalue > 0.01) { */
+	/*   printf("dvalue = %f = %d/%d\n", dvalue, numerator, denominator); */
 	/* } */
       }
       else {
@@ -411,10 +411,10 @@ rmf_compute(int *dct)
 	    }
 	  }
 	}
-	fvalue = ((double)numerator)/((double) denominator);
-	matrix_set_double(M_v,i,j,fvalue);
-	/* if(fvalue > 0.01) { */
-	/*   printf("fvalue = %f = %d/%d\n", fvalue, numerator, denominator); */
+	dvalue = ((double)numerator)/((double) denominator);
+	matrix_set_double(M_v,i,j,dvalue);
+	/* if(dvalue > 0.01) { */
+	/*   printf("dvalue = %f = %d/%d\n", dvalue, numerator, denominator); */
 	/* } */
       }
       else {
