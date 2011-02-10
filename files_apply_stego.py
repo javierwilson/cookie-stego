@@ -5,18 +5,13 @@ from stat import *
 import re
 import sys
 
-
-import numpy as np
-import matplotlib.mlab as mlab
-import matplotlib.pyplot as plt
-
 count = 0
 maximum = 0
 
 dirname="."
 do_steghide=False
 do_outguess=False
-
+prefix=""
 for i in range(1,len(sys.argv)):
     if(sys.argv[i]=="--dir"):
         if(i+1>=len(sys.argv)):
@@ -33,6 +28,10 @@ for i in range(1,len(sys.argv)):
         print "do_outguess"
     if(sys.argv[i]=="--book"):
         pass
+    if(sys.argv[i]=="--prefix"):
+        prefix= sys.argv[i+1]
+        i = i + 1
+    
 
 dirname = os.path.abspath(dirname)
 
@@ -48,12 +47,12 @@ for root,dirs,files in os.walk(dirname):
            or (re.search("jpg$", filename)!=None)):
             if(not re.search("steg",filename)):
                 if(do_steghide):
-                    command="steghide embed -cf "+root + "/" +f+" -sf "+root + "/" +"steg.steghide."+f+" -ef secret.txt -p toto -f"
+                    command="steghide embed -cf "+root + "/" +f+" -sf "+root + "/" +"steg.steghide."+ prefix +f+" -ef secret.txt -p toto -f"
                     print "%d %s" %(count,command)
                     os.system(command)
 
                 if(do_outguess):
-                    command="outguess -k \"toto\" -d secret.txt "+root + "/" +f+" -sf "+root + "/" +"steg.outguess."+f
+                    command="outguess -k \"toto\" -d secret.txt "+root + "/" +f+" -sf "+root + "/" +"steg.outguess." + prefix +f
                     print "%d %s" %(count,command)
                     os.system(command)
 
