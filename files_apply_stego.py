@@ -5,14 +5,6 @@ from stat import *
 import re
 import sys
 
-<<<<<<< HEAD
-
-#import numpy as np
-import matplotlib.mlab as mlab
-import matplotlib.pyplot as plt
-
-=======
->>>>>>> 4379e0ad830171177c2bdc1f00696c53c79ae875
 count = 0
 maximum = 0
 
