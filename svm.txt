@@ -1,0 +1,4 @@
+svm-scale histo.ds > histo.scale.ds
+svm-train histo.scale.ds 
+svm-scale predict.ds > predict.scale.ds 
+svm-predict predict.scale.ds histo.scale.ds.model predict.output

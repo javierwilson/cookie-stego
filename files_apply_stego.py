@@ -6,7 +6,7 @@ import re
 import sys
 
 
-import numpy as np
+#import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
@@ -37,9 +37,9 @@ for i in range(1,len(sys.argv)):
 dirname = os.path.abspath(dirname)
 
 for root,dirs,files in os.walk(dirname):
-#    print root
-#    print dirs
-#    print files
+    #print root
+    #print dirs
+    #print files
 
     for f in files:
         filename = root + "/" + f
