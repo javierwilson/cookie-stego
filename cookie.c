@@ -21,7 +21,7 @@ struct option long_options[] = {
 
 extern char *optarg;
 
-void printhelp(myname) {
+void printhelp(char *myname) {
   printf("Usage: %s --file=example.jpg [--module=algo] [--plot] [--svm=file.ds] [--steg] [--help]\n", myname);
   printf("      --file=example.jpg sets jpeg image file to analyze.\n");
   printf("      --module=algo sets the algorithm to be used.\n");
