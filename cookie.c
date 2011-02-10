@@ -13,12 +13,23 @@ struct option long_options[] = {
   {"module", 1, 0, 0},
   {"file", 1, 0, 1},
   {"svm", 1, 0, 2},
-  {"steg", 1, 0, 3},
+  {"steg", 0, 0, 3},
+  {"help", 0, 0, 4},
   {0, 0, 0, 0}
 };
 
 extern char *optarg;
 
+void printhelp(myname) {
+  printf("Usage: %s --file=example.jpg [--module=algo] [--svm=file.ds] [--steg] [--help]\n", myname);
+  printf("      --file=example.jpg sets jpeg image file to analyze.\n");
+  printf("      --module=algo sets the algorithm to be used.\n");
+  printf("               currently supported algos: dumb, histo, rmf.\n");
+  printf("      --svm=file.ds sets the output svm data file to write to.\n");
+  printf("      --steg sets stego flag on in the svm data file.\n");
+  printf("      --help prints this text.\n");
+  exit(0);
+}
 
 extern int (*dct)[DLEN][DLEN];
 int main(int argc, char *argv[]) {
@@ -45,7 +56,7 @@ int main(int argc, char *argv[]) {
     
 
 
-  // set default option
+  // set default module option
 
   strcpy(algoname,"dumb");
 
@@ -56,7 +67,7 @@ int main(int argc, char *argv[]) {
 
     if(opt==-1) break;
     switch (opt) {
-    case 0:
+    case 0: // --module=modulename
       //printf ("option %s", long_options[option_index].name);
       if (optarg) {
 	if(strlen(optarg)<MAXLEN_ALGONAME) {
@@ -68,7 +79,7 @@ int main(int argc, char *argv[]) {
 	exit(0);
       }
       break;
-    case 1:
+    case 1: // --file=filename
       if (optarg) {
 	if(strlen(optarg)<MAXLEN_FILENAME) {
 	  strcpy(filename,optarg);
@@ -80,7 +91,7 @@ int main(int argc, char *argv[]) {
       }
       break;
       
-    case 2:
+    case 2: // --svm=filename
       if (optarg) {
 	if(strlen(optarg)<MAXLEN_FILENAME) {
 	  strcpy(svmfilename,optarg);
@@ -92,24 +103,28 @@ int main(int argc, char *argv[]) {
       }
       break;
 
-    case 3:
+    case 3: // --steg
       if (optarg) {
 	steg = atoi(optarg);
       }
+      break;
+
+    case 4: // --help
+      printhelp(argv[0]);
       break;
     }
   }
 
   if(filename[0]==0) {
-    printf("please give a file name: %s --file=sample.jpg\n", argv[0]);
+    printf("please give a file name.\n");
+    printhelp(argv[0]);
     exit(1);
   }
 
 
   // extract DCT's
   size = extract_dct(filename);
-  printf("*** Number of DCTs: %d ***\n", size);
-
+  //printf("*** Number of DCTs: %d ***\n", size);
 
   /*********************** dumb **************************/
   if(!strcmp(algoname,"dumb")) {
@@ -209,12 +224,14 @@ int main(int argc, char *argv[]) {
 	for(i=0;i<size_result;i++) {
 	  fprintf(svmfile, "%d:%d ",i+1, tab[i]);
 	}
+        free(result);
       }
       if(!strcmp(algoname,"rmf")) {
 	float *tab = result;
 	for(i=0;i<size_result;i++) {
 	  fprintf(svmfile, "%d:%f ",i+1, tab[i]);
 	}
+        free(result);
       }
       fprintf(svmfile, "\n");
       fclose(svmfile);
@@ -224,7 +241,6 @@ int main(int argc, char *argv[]) {
     }
   }
   
-  free(result);
 
   return 0;
 
