@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
   /*********************** SVM **************************/
   if(svmfilename[0]!=0) {
     int i;
-    svmfile = fopen(svmfilename,"w");
+    svmfile = fopen(svmfilename,"a");
     if(svmfile != NULL) {
       fprintf(svmfile, "%f ",(float) steg);
       
