@@ -14,17 +14,19 @@ struct option long_options[] = {
   {"file", 1, 0, 1},
   {"svm", 1, 0, 2},
   {"steg", 0, 0, 3},
-  {"help", 0, 0, 4},
+  {"plot", 0, 0, 4},
+  {"help", 0, 0, 5},
   {0, 0, 0, 0}
 };
 
 extern char *optarg;
 
 void printhelp(myname) {
-  printf("Usage: %s --file=example.jpg [--module=algo] [--svm=file.ds] [--steg] [--help]\n", myname);
+  printf("Usage: %s --file=example.jpg [--module=algo] [--plot] [--svm=file.ds] [--steg] [--help]\n", myname);
   printf("      --file=example.jpg sets jpeg image file to analyze.\n");
   printf("      --module=algo sets the algorithm to be used.\n");
   printf("               currently supported algos: dumb, histo, rmf.\n");
+  printf("      --plot prints gnuplot friendly output.\n");
   printf("      --svm=file.ds sets the output svm data file to write to.\n");
   printf("      --steg sets stego flag on in the svm data file.\n");
   printf("      --help prints this text.\n");
@@ -39,9 +41,8 @@ int main(int argc, char *argv[]) {
   int type;     // float,int,double... for result[]
   int size_result;
 
-
   int steg = 0;
-
+  int plot = 0;
   int size, feature;
   char filename[MAXLEN_FILENAME];
   char svmfilename[MAXLEN_FILENAME];
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]) {
 
 
   for(;;) {
-    opt = getopt_long (argc, argv, "01234",
+    opt = getopt_long (argc, argv, "012345",
 		       long_options, &option_index);
 
     if(opt==-1) break;
@@ -104,12 +105,17 @@ int main(int argc, char *argv[]) {
       break;
 
     case 3: // --steg
-      if (optarg) {
-	steg = atoi(optarg);
-      }
+      steg = 1;
+      //if (optarg) {
+	//steg = atoi(optarg);
+      //}
       break;
 
-    case 4: // --help
+    case 4: // --plot
+      plot = 1;
+      break;
+
+    case 5: // --help
       printhelp(argv[0]);
       break;
     }
@@ -171,7 +177,7 @@ int main(int argc, char *argv[]) {
     numbers = malloc(size_result*sizeof(int));
     result = (void *) malloc(size_result*sizeof(int));
     tab = (int *) result;
-    histo_get_features(numbers, tab);
+    histo_get_features(numbers, tab, plot);
 
     // free allocations
     histo_release();

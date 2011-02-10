@@ -51,7 +51,7 @@ void dumb_compute(int adct[DLEN][DLEN]) {
       sum[count] += adct[x][y];
     }
   }
-  printf("Sum of DCT # %d is %d\n",count,sum[count]);
+  DUMB_DEBUG("Sum of DCT # %d is %d\n",count,sum[count]);
   count++;
 }
 
