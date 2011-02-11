@@ -11,6 +11,7 @@ maximum = 0
 dirname="."
 do_steghide=False
 do_outguess=False
+module="dumb"
 
 for i in range(1,len(sys.argv)):
     if(sys.argv[i]=="--dir"):
@@ -22,6 +23,10 @@ for i in range(1,len(sys.argv)):
         print "directory : " + dirname
     if(sys.argv[i]=="--book"):
         pass
+    if(sys.argv[i]=="--module"):
+        module = sys.argv[i+1]
+        i = i + 1
+        
 
 dirname = os.path.abspath(dirname)
 
@@ -36,8 +41,8 @@ for root,dirs,files in os.walk(dirname):
         if((re.search("JPG$", filename)!=None)
            or (re.search("jpg$", filename)!=None)):
             if(re.search("steg",filename)!=None):
-                command="./cookie --file="+root + "/" +f+" --module=histo --svm=histo.ds --steg"
+                command="./cookie --file="+root + "/" +f+" --module="+module+" --svm=histo.ds --steg"
             else:
-                command="./cookie --file="+root + "/" +f+" --module=histo --svm=histo.ds"
+                command="./cookie --file="+root + "/" +f+" --module="+module+" --svm=histo.ds"
             print "%d %s" %(count,command)
             os.system(command)
