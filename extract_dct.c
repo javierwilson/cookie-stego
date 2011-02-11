@@ -37,7 +37,7 @@ int extract_dct(char *filename) {
 
   // print basic info and get specific index values
   int total_size = 0;
-  int size[3];
+  int size[cinfo.num_components];
   EXTRACT_DCT_DEBUG("components: %d  image width: %d  image height: %d\n", cinfo.num_components, cinfo.image_width, cinfo.image_height);
   for (compnum=0; compnum < cinfo.num_components; compnum++) {
     size[compnum] = cinfo.comp_info[compnum].width_in_blocks * cinfo.comp_info[compnum].height_in_blocks;
