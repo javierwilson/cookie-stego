@@ -1,0 +1,22 @@
+command="steghide embed -cf "+root + "/" +f+" -sf "+root + "/" +"steg.steghide."+f+" -ef secret.txt -p toto -f"
+
+sur une machine virtuelle :
+5171 photos jpeg
+
+         MV
+
+
+steghide-10   16m11.460s
+        -1377 14m51.483s
+outguess-10   21m46.608s
+
+machine linux : Intel(R) Pentium(R) 4 CPU 2.80GHz
+steghide - 558 6m59.296s
+outguess - 558 104m8.652s
+
+-------------------------
+
+
+(180 + 42) / 126.0 
+1.7619047619047619 min par fichier
+
