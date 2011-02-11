@@ -41,8 +41,8 @@ for root,dirs,files in os.walk(dirname):
         if((re.search("JPG$", filename)!=None)
            or (re.search("jpg$", filename)!=None)):
             if(re.search("steg",filename)!=None):
-                command="./cookie --file="+root + "/" +f+" --module="+module+" --svm=histo.ds --steg"
+                command="cookie --file="+root + "/" +f+" --module="+module+" --svm=histo.ds --steg"
             else:
-                command="./cookie --file="+root + "/" +f+" --module="+module+" --svm=histo.ds"
+                command="cookie --file="+root + "/" +f+" --module="+module+" --svm=histo.ds"
             print "%d %s" %(count,command)
             os.system(command)
